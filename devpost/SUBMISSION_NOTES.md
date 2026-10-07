@@ -1,7 +1,26 @@
+---
+project: ORA
+reference_implementation: AURELIA Sanctuary
+builder: Aje oluwaseun isaac (@0xaje)
+github: https://github.com/0xaje/Ora
+devpost: https://devpost.com/Cryptoverse
+hackathon: Devpost Build With AI: Basics
+status: approved
+---
+
 # Devpost Submission Preparation Notes — ORA
 
 > **Authoritative submission preparation guide for Devpost "Build With AI: Basics".**  
 > Formulated from the active repository, verified runtime behavior, and approved planning artifacts.
+
+---
+
+### Builder & Project Information
+- **Builder / Developer:** Aje Oluwaseun Isaac ([@0xaje](https://github.com/0xaje))
+- **Devpost Profile:** [Cryptoverse](https://devpost.com/Cryptoverse)
+- **Public GitHub Repository:** [https://github.com/0xaje/Ora](https://github.com/0xaje/Ora)
+- **Project Title:** **ORA — Conversational Spatial Intelligence for High-Value Digital Products** *(Demonstrated via AURELIA Sanctuary Reference Implementation)*
+- **Hackathon:** Devpost Build With AI: Basics (October 2026)
 
 ---
 

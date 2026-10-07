@@ -1,5 +1,11 @@
 ---
 doc: spec
+project: ORA
+reference_implementation: AURELIA Sanctuary
+builder: Aje oluwaseun isaac (@0xaje)
+github: https://github.com/0xaje/Ora
+devpost: https://devpost.com/Cryptoverse
+hackathon: Devpost Build With AI: Basics
 status: approved
 ---
 
