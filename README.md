@@ -1,67 +1,61 @@
-# AURELIA
+# ORA
 
 > **Talk to the space. Watch it respond.**  
-> A conversational spatial luxury sanctuary experience powered by ORA — an embodied voice and spatial intelligence layer.
+> A reusable conversational intelligence and spatial action layer for high-value visual digital products.  
+> *Demonstrated via the **AURELIA Sanctuary** luxury architectural shortlet reference implementation.*
 
 [![Test Suite](https://img.shields.io/badge/tests-261%20passing-brightgreen)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Devpost](https://img.shields.io/badge/Devpost-Build%20With%20AI%3A%20Basics-blueviolet)](https://learn-ai-basics.devpost.com/)
+[![Repository](https://img.shields.io/badge/GitHub-0xaje%2FOra-black)](https://github.com/0xaje/Ora)
 
 ---
 
-## What is AURELIA?
+## What is ORA?
 
-AURELIA is a luxury modernist private shortlet sanctuary where the architectural environment itself acts as the body of the AI conversation. Rather than interacting with a detached floating chatbot widget, visitors explore the estate through spoken dialogue: camera perspectives glide through the residence, lighting ambiances dissolve from morning daylight to dusk, acoustic soundscapes breathe with speech turns, and guests initiate verified reservation requests with mobile messaging handoffs.
+**ORA** is an embodied conversational intelligence layer designed for high-value visual products.
 
-**ORA** is the underlying reusable conversational intelligence layer that decodes natural speech, navigates spatial coordinates, coordinates soundscape ducking, and handles commerce handoffs.
+Most websites today trap AI inside a disconnected floating chat bubble in the lower corner of the screen. The chatbot is blind to what the user sees, and the user must still click through complex menus, carousels, and dropdown filters.
 
----
+**ORA changes this fundamental paradigm:**
+Instead of a separate chatbot on top of a website, **the product surface becomes the body of the AI**. 
 
-## The Problem
-
-Traditional luxury travel and vacation estate booking interfaces are fractured and uninspired:
-1. **Menu & Filter Fatigue:** Travelers are forced through endless dropdowns, thumbnail carousels, and multi-step forms to find specific views or amenities.
-2. **Disconnected Chatbots:** Existing AI assistants sit in small text bubbles in the corner of the screen, completely blind and detached from the visual product being presented.
-3. **Fictitious Checkout Promises:** Chatbots often hallucinate availability or pretend to complete instant hotel room bookings without authentic host verification.
-
-AURELIA replaces this fragmented experience with an embodied spatial concierge that visually guides visitors and provides a verified reservation request path.
+When a user speaks, ORA directly controls the digital canvas:
+- **Navigates spatial coordinates & camera angles** across 2D/3D visualizers.
+- **Crossfades environmental ambiances** (e.g., morning daylight to evening sunset).
+- **Coordinates acoustic soundscapes** with automated volume ducking during speech turns.
+- **Extracts transaction intent** and generates verified transaction passes with mobile messaging handoffs.
 
 ---
 
-## The Experience
+## Flagship Showcase: AURELIA Sanctuary
 
-$$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{RESERVE} \longrightarrow \text{HANDOFF}$$
+To prove ORA in a demanding real-world domain, this repository includes **AURELIA Sanctuary** as its flagship reference implementation.
 
-1. **SPEAK:** Speak naturally into hands-free microphone streaming (*"Ora, show me the living room at sunset"*, *"Take me on a tour"*).
-2. **UNDERSTAND:** Low-latency speech recognition streams audio to AssemblyAI v3, parsed by sub-millisecond fast-path intent extractors (<1ms) or conversational LLM reasoning.
-3. **EXPLORE:** The 300-frame photographic canvas scrubs smoothly to the requested architectural space, and detail placards center into view.
-4. **DECIDE:** The visitor inspects estate features, listens to autonomous guided tour narrations, and interrupts at any moment via instant voice barge-in.
-5. **RESERVE:** The visitor states stay dates and name (*"Reserve Aurelia for John from October 9th to October 11th"*). Deterministic business logic validates stay duration, calculates verified pricing ($1,850/night), and generates an authentic `AUR-YYYY-XXXX` reservation pass in `READY_FOR_HANDOFF` status.
-6. **HANDOFF:** Clicking **"Continue on WhatsApp"** opens an authentic prefilled `https://wa.me/?text=...` browser deep link directly transferring the itemized request to host concierge messaging.
-
----
-
-## Why It Is Different
-
-| Traditional Booking UI | Generic AI Chatbot | AURELIA with ORA |
-| :--- | :--- | :--- |
-| Click filter dropdowns & thumbnail carousels | Floating text bubble in bottom corner | **Viewport canvas is the interface** |
-| Silent, disconnected browsing | Text-only answers with static URLs | **Synchronized WebAudio soundscape with voice ducking** |
-| Rigid calendar date pickers | Hallucinates dates or unavailable rates | **Deterministic reservation logic ($1,850/night) & verified reference generation** |
-| Forced multi-page form checkouts | Fake "Your room is booked" claims | **Transparent `READY_FOR_HANDOFF` pass & direct WhatsApp mobile dispatch** |
+AURELIA is a private modernist desert shortlet residence. Rather than clicking through static photo galleries and room forms, guests explore the estate through spoken conversation with ORA:
+- *"Show me the living room at sunset."* &rarr; The 300-frame canvas smoothly glides to the living room, lighting warms to evening dusk, and background music ducks.
+- *"Show me the master suite."* &rarr; Architectural detail placards center into view.
+- *"Give me a tour."* &rarr; ORA leads an autonomous 8-stop guided tour with instant voice barge-in.
+- *"Reserve Aurelia for John from October 9th to October 11th."* &rarr; ORA verifies stay dates, calculates verified pricing ($1,850/night), and generates a glassmorphic **Reservation Pass** with one-click **WhatsApp handoff** to the estate host.
 
 ---
 
-## Demo & Video Walkthrough
+## The Experience Loop
 
-- **Demonstration Video:** `[Demo Video Link — Under 3 Minutes — To Be Added]`
-- **Interactive Prototype:** Local or deployed environment (see [Getting Started](#getting-started)).
+$$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{TRANSACT} \longrightarrow \text{HANDOFF}$$
+
+1. **SPEAK:** Speak naturally via hands-free streaming microphone input.
+2. **UNDERSTAND:** Continuous 16kHz PCM audio streams to AssemblyAI v3 WebSocket; sub-millisecond fast-path router (<1ms) or LLM extracts intent.
+3. **EXPLORE:** The decoupled `ProductAdapter` navigates the visual canvas: scrubbing frames, switching camera viewpoints, or adjusting lighting.
+4. **DECIDE:** The visitor explores architectural features, takes guided tours, and asks questions with instant voice interruption (barge-in).
+5. **TRANSACT:** Natural language extraction captures customer parameters (guest name, dates, preferences), and authoritative domain logic computes verified pricing.
+6. **HANDOFF:** Generates a structured digital pass (`READY_FOR_HANDOFF`) and transfers directly to mobile messaging channels (WhatsApp, Telegram, or CRM).
 
 ---
 
-## Architecture
+## Architecture & Decoupled Product Adapter
 
-AURELIA operates on a dual-plane architecture:
+ORA is designed to plug into **any** high-value visual product via the formal `ProductAdapter` interface:
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -90,7 +84,7 @@ AURELIA operates on a dual-plane architecture:
 │  └──────────────────────────────────────────────────────────┬─────────────┘  │
 │                                                             │                │
 │  ┌──────────────────────────────────────────────────────────┴─────────────┐  │
-│  │                 ReservationPass Modal (Phase 3 & 4)                    │  │
+│  │                 ReservationPass Modal (Commerce Engine)                │  │
 │  │    • Displays Reference (AUR-YYYY-XXXX), Dates, Nights, Rate, Total    │  │
 │  │    • Primary CTA: "Continue on WhatsApp" -> wa.me deep link            │  │
 │  │    • Subscribed to session ReservationStore (HANDOFF_OPENED)           │  │
@@ -110,13 +104,54 @@ AURELIA operates on a dual-plane architecture:
 
 ---
 
-## AI & Voice Flow
+## Where We Are Today (Current Verified Status)
 
-1. **Continuous Speech-to-Text:** The browser captures microphone audio at 16kHz PCM mono and streams via WebSocket directly to AssemblyAI Universal Streaming v3.
-2. **Ephemeral Security:** Client requests short-lived 60-second tokens from the server via `GET /api/assemblyai/token`, ensuring API keys are never exposed in client bundles.
-3. **Intent Resolution (<1ms Fast-Path & Fallback LLM):** Common spatial and reservation commands are resolved instantly via client-side regex extractors. Complex queries fall back to `POST /api/ora/converse` powered by local Ollama (`llama3.2:1b`) or OpenRouter models.
-4. **Instant Voice Barge-In:** When user speech is detected, active speech synthesis and camera tour tweens immediately abort.
-5. **Speech Synthesis (TTS):** Responses are vocalized using Web Speech API with serene, natural pacing.
+- **261 Automated Tests Passing** (`npm test`, 0 failures) across 63 test suites.
+- **Production Build Verified** (`npm run build`) compiling in ~3.2 seconds.
+- **Continuous Voice Streaming:** Real-time microphone worklet with AssemblyAI Universal Streaming v3 and server-side ephemeral token minting.
+- **Instant Voice Barge-In:** Immediate speech cancellation and tour abort when user speaks.
+- **Acoustic Harmony:** WebAudio soundscape with dynamic volume ducking during speech turns.
+- **Verified Commerce Flow:** Spoken reservation extraction, deterministic calculations ($1,850 × nights), authentic `AUR-YYYY-XXXX` reference generator, and WhatsApp browser deep link handoff.
+- **Repository Security:** Zero committed secrets; all credentials protected by `.gitignore`.
+
+---
+
+## Forward Product Roadmap & Integration Ecosystem
+
+ORA is built as an extensible conversational layer with a clear path forward:
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            ORA PRODUCT ROADMAP                               │
+└───────┬──────────────────────────────┬──────────────────────────────┬────────┘
+        │                              │                              │
+        ▼                              ▼                              ▼
+  PHASE 1 (NOW)                  PHASE 2 (NEXT)                 PHASE 3 (SCALE)
+  • Verified POC                 • Multi-Channel Handoffs       • Omnichannel Enterprise
+  • 300-Frame Scrubber           • Telegram & SMS / iMessage    • WhatsApp Cloud API Bot
+  • AssemblyAI Streaming v3      • Multi-property catalog       • CRM Webhooks (Salesforce)
+  • WhatsApp wa.me Link          • 3D Gaussian Splatting / Three • On-device Whisper / Kokoro
+  • Shortlet Reference           • Automotive / Retail Adapters • Multilingual Concierge
+```
+
+### 1. Multi-Channel Transaction Handoffs
+- **Current:** Verified client-side URL-encoded WhatsApp deep links (`wa.me`).
+- **Next:** Direct handoff channels for **Telegram**, **SMS / Apple Messages for Business**, and **Email booking summaries**.
+- **Enterprise:** Webhook adapters for **WhatsApp Business Cloud API**, **Twilio**, and **HubSpot / Salesforce Hospitality CRM**.
+
+### 2. Pluggable `ProductAdapter` Ecosystem
+- **Luxury Real Estate & Shortlets:** High-end architectural estates, vacation villas *(current Aurelia reference)*.
+- **Automotive & EV Showrooms:** Conversational 3D configurators (*"Show me the cockpit in carbon fiber"*, *"Schedule a test drive"*).
+- **Bespoke Retail & High Jewelry:** Guided inspection of luxury goods with itemized concierge purchase tickets.
+- **Architectural Studios:** Interactive BIM / Matterport walkthroughs for remote clients.
+
+### 3. Spatial Vision & 3D Immersion
+- **WebGL / Three.js / Splatting:** Transition from photographic frame scrubber to real-time 3D Gaussian Splatting and orbit cameras.
+- **Multimodal Interaction:** Combine voice with pointer/gaze tracking (*"Tell me more about this fixture"*).
+
+### 4. Advanced Voice Intelligence
+- **On-Device Speech Synthesis:** Fast local neural TTS (Kokoro / ElevenLabs streaming).
+- **Multilingual Support:** Instant conversational translation in French, Spanish, Arabic, and Mandarin.
 
 ---
 
@@ -178,77 +213,7 @@ npm run dev
 
 ---
 
-## End-to-End Judge Demonstration Workflow
-
-Try the following interactive flow:
-
-1. **Arrival:** Open the application. Experience the cinematic 300-frame landing canvas with ambient soundscape.
-2. **Audio Activation:** Click the speaker icon to unmute the living soundscape.
-3. **Voice Inquiry:** Click the microphone or speak:  
-   *"Ora, show me the living room at sunset."*  
-   *Result:* Camera scrubs to the living room, lighting warms to evening amber, and soundscape gently ducks during Ora's response.
-4. **Sanctuary Placard:** Speak:  
-   *"Show me the master bedroom."*  
-   *Result:* The Master Bedroom detail placard centers onto the screen.
-5. **Grand Tour:** Speak:  
-   *"Give me a full tour."*  
-   *Result:* Ora leads an autonomous guided sequence through all architectural zones. Interrupt at any time by speaking.
-6. **Reservation Request:** Speak:  
-   *"Ora, I'd like to reserve Aurelia for John from October 9th to October 11th."*  
-   *Result:* ORA verifies stay dates, calculates 2 nights at $1,850/night ($3,700 total), and displays the glassmorphic Reservation Pass modal.
-7. **Mobile Handoff:** Click **"Continue on WhatsApp"** on the Reservation Pass modal.  
-   *Result:* Opens an authentic prefilled WhatsApp deep link ready to send to the host.
-
----
-
-## Devpost Learn Skill Pack Workflow
-
-This project was built following the disciplined, learner-led planning workflow defined by the official Devpost Learn Skill Pack (`challengepost/learn-ai-basics`):
-
-- **[devpost/scope.md](devpost/scope.md)** — Kernel definition, audience, and strict proof-of-concept boundaries.
-- **[devpost/prd.md](devpost/prd.md)** — Product Requirements Document detailing user personas, journeys, functional requirements, and guardrails.
-- **[devpost/spec.md](devpost/spec.md)** — Technical Specification detailing dual-plane architecture, state lifecycles, and Product Adapter interfaces.
-- **[devpost/checklist.md](devpost/checklist.md)** — Incremental implementation slices verified by automated test suites.
-
----
-
-## Project Structure
-
-```text
-Aurelia/
-├── data/
-│   └── shortlet.json               # Authoritative estate spaces, pricing & metadata
-├── devpost/
-│   ├── scope.md                    # Approved Scope document
-│   ├── prd.md                      # Approved Product Requirements Document
-│   ├── spec.md                     # Approved Technical Specification
-│   ├── checklist.md                # Implementation verification checklist
-│   ├── DEMO_PLAN.md                # 3-minute video walkthrough guide
-│   └── SUBMISSION_NOTES.md         # Devpost submission prompts and answers
-├── public/
-│   ├── audio/                      # Soundscape audio assets
-│   ├── frames/                     # 300 photographic canvas scrubber frames (day/sunset/night)
-│   └── spaces/                     # Architectural detail photography
-├── server/
-│   ├── oraConversationEngine.ts    # Server-side Ollama / OpenRouter LLM orchestration
-│   └── oraPrompt.ts                # Structured JSON prompt instructions
-├── src/
-│   ├── audio/                      # AureliaAtmosphere WebAudio coordinator & ducking
-│   ├── camera/                     # CameraTimeline controller & frame interpolation
-│   ├── components/                 # ScrollHero, OraPresence, SpaceDetail, ReservationPass
-│   ├── domain/                     # Reservation logic, pricing, reference generator & handoff
-│   ├── ora/                        # ProductAdapter, fastPath router, conversational provider
-│   └── voice/                      # AssemblyAI streaming client & speech synthesis
-├── tests/                          # 261 passing unit & integration tests
-├── LICENSE                         # MIT License
-└── package.json
-```
-
----
-
 ## Testing & Verification
-
-Run the comprehensive test suite verifying property domain integrity, spatial navigation, reservation extraction, WhatsApp handoff, and audio resampling:
 
 ```bash
 # Run all 261 tests
@@ -260,12 +225,16 @@ npm run build
 
 ---
 
-## Current Scope & Honest POC Boundaries
+## Devpost Learn Skill Pack Workflow
 
-- **Single Private Estate:** Aurelia Sanctuary is an exclusive buyout estate ($1,850/night), not a multi-room hotel with PMS room inventory.
-- **Reservation Request Lifecycle:** Generates verified `READY_FOR_HANDOFF` requests; does not process live credit cards or mock real-time bank charges.
-- **WhatsApp Direct Deep Link:** Employs client-side `wa.me` URL-encoded deep links rather than paid third-party WhatsApp Business Cloud API servers.
-- **Session Persistence:** Reservation state is persisted in `sessionStorage` for demo resilience without external database overhead.
+This project followed the disciplined planning workflow defined by the official Devpost Learn Skill Pack (`challengepost/learn-ai-basics`):
+
+- **[devpost/scope.md](devpost/scope.md)** — Kernel definition, audience, and strict proof-of-concept boundaries.
+- **[devpost/prd.md](devpost/prd.md)** — Product Requirements Document detailing user personas, journeys, functional requirements, and guardrails.
+- **[devpost/spec.md](devpost/spec.md)** — Technical Specification detailing dual-plane architecture, state lifecycles, and Product Adapter interfaces.
+- **[devpost/checklist.md](devpost/checklist.md)** — Incremental implementation slices verified by automated test suites.
+- **[devpost/DEMO_PLAN.md](devpost/DEMO_PLAN.md)** — Under-3-minute video walkthrough guide.
+- **[devpost/SUBMISSION_NOTES.md](devpost/SUBMISSION_NOTES.md)** — Complete Devpost submission form prompts and answers.
 
 ---
 
