@@ -83,10 +83,11 @@ The project adhered strictly to the Devpost Learn Skill Pack (`challengepost/lea
 
 ---
 
-### 11. Current Proof-of-Concept Boundaries
+### 11. Current Proof-of-Concept Boundaries & Architecture Choice
 - **Single Estate:** Modeled for the private Aurelia Sanctuary estate ($1,850/night exclusive buyout), not a multi-room hotel PMS.
 - **Reservation Request:** Focuses on verified request generation and direct WhatsApp handoff rather than live credit card processing.
 - **Session Persistence:** Relies on in-memory and `sessionStorage` state to eliminate external database setup requirements.
+- **Why Local Architecture (Ollama) Over Cloud Deployment (Vercel):** The app is deliberately built to run on local open-source inference (`Ollama` + `llama3.2:1b`). This keeps the system 100% private and eliminates expensive paid LLM cloud API subscriptions ($0 operating cost). A static deployment on Vercel would break connection to the user's local Ollama instance; keeping it on `localhost` ensures true local sovereignty, and the video demo provides full end-to-end proof for judges.
 
 ---
 

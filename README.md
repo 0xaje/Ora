@@ -200,6 +200,17 @@ npm run dev
 
 ---
 
+## Architecture Decision: Why Local Execution (Ollama) & Deployment Note
+
+ORA is intentionally architected to run on `localhost:5173` powered by **local open-source LLM inference via Ollama (`llama3.2:1b`)**:
+
+1. **Zero-Cost & Accessible ($0 API Subscription):** Traditional web AI demos rely on expensive proprietary LLM API subscriptions (OpenAI, Anthropic). ORA is designed to be accessible to anyone with a computer by using free, local open models.
+2. **Complete Data Privacy:** Guest voice inquiries and conversation turns are processed locally on-device rather than being transmitted to third-party proprietary clouds.
+3. **Localhost vs. Cloud Hosting (Vercel):** Deploying a full local-inference stack to static platforms like Vercel or Netlify would sever the connection to the user's local Ollama instance and require either cloud GPU container hosting or paid API keys. Running locally on `localhost` ensures 100% functionality without subscription gates or infrastructure overhead.
+4. **Devpost Compliance:** In line with Devpost's guidelines (*"Reviewers won't clone or run code, so the video has to show it working — deployment is optional"*), the video walkthrough demonstrates the complete working system end-to-end.
+
+---
+
 ## Environment Variables
 
 | Variable | Description | Exposure |
