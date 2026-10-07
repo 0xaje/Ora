@@ -143,8 +143,8 @@ AURELIA operates on a dual-plane architecture:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/0xaje/Aurelia.git
-cd Aurelia
+git clone https://github.com/0xaje/Ora.git
+cd Ora
 
 # 2. Install dependencies
 npm install
