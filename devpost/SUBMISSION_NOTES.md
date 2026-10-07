@@ -1,4 +1,4 @@
-# Devpost Submission Preparation Notes — AURELIA
+# Devpost Submission Preparation Notes — ORA
 
 > **Authoritative submission preparation guide for Devpost "Build With AI: Basics".**  
 > Formulated from the active repository, verified runtime behavior, and approved planning artifacts.
@@ -6,33 +6,37 @@
 ---
 
 ### 1. Project Title
-**AURELIA — Conversational Spatial Luxury Sanctuary**
+**ORA — Conversational Spatial Intelligence for High-Value Digital Products**  
+*(Demonstrated via AURELIA Sanctuary Reference Implementation)*
 
 ---
 
 ### 2. One-Line Elevator Pitch
-The space itself is the interface: a conversational luxury estate that glides, breathes, and prepares verified reservations through voice.
+The product canvas is the body of the AI: a reusable voice and spatial action layer that turns visual web experiences into conversationally controllable environments.
 
 ---
 
-### 3. What AURELIA Does (Plain English)
-AURELIA transforms the static booking page into an embodied architectural concierge. Instead of clicking dropdown menus and booking forms, visitors talk naturally with **ORA**, an intelligent voice and spatial agent. As guests speak, the application scrubs through a 300-frame photographic canvas, crossfades daylight to evening dusk, centers architectural detail placards, coordinates ambient soundscape ducking, extracts stay dates and guest details, and issues an itemized glassmorphic **Reservation Pass** with direct WhatsApp messaging handoff to the host.
+### 3. What ORA Does (Plain English)
+**ORA** is an embodied conversational intelligence and action layer that makes high-value visual products conversationally controllable. 
+
+Instead of trapping AI inside a blind chat widget in the corner of a screen, ORA directly manipulates the digital canvas in response to spoken voice: navigating camera coordinates, shifting environmental ambiances (daylight to evening dusk), coordinating background soundscape ducking, and driving verified transactions with mobile messaging handoffs.
+
+**AURELIA Sanctuary** is the flagship reference implementation: an exclusive modernist shortlet estate where visitors explore 8 architectural spaces and book complete estate stays entirely through natural speech.
 
 ---
 
 ### 4. Who It Is For
-- **Experiential Travelers & Retreat Planners:** Discerning clients who want to explore and understand an estate's ambiance, architecture, and lighting naturally before reserving a stay.
-- **Bespoke Shortlet & Estate Owners:** Luxury property hosts seeking to convert high-net-worth inquiries without friction-heavy checkout forms or impersonal chatbot popups.
+- **High-Value Product Creators & Platforms:** Luxury real estate, automotive/EV configurators, architectural studios, and bespoke luxury commerce seeking an embodied conversational sales agent.
+- **Experiential Travelers & Clients:** Visitors who discover, explore, and transact through natural human dialogue (*"show me the pool at sunset"*, *"reserve for John from October 9th to 11th"*) rather than clicking through cumbersome dropdown menus and forms.
 
 ---
 
 ### 5. The Problem Being Solved
-Standard luxury travel platforms suffer from:
-1. **Dropdown & Carousel Fatigue:** Visitors must endlessly click tabs to find specific views, amenities, or lighting conditions.
-2. **Disconnected Chatbots:** AI assistants typically exist as isolated text bubbles in the corner of the screen, blind to the visuals on page.
-3. **Fictitious Checkout Promises:** Chatbots often hallucinate prices or claim a room is booked without authentic verification.
+1. **Disconnected Chatbots:** Existing AI assistants sit in small text bubbles in the corner of the screen, completely blind to what the user sees.
+2. **Filter & Form Fatigue:** Visitors are forced through complex dropdowns, thumbnail carousels, and multi-step forms to find specific views or amenities.
+3. **Fictitious Checkout Promises:** Chatbots frequently hallucinate availability or pretend to complete instant bookings without authentic verification.
 
-AURELIA eliminates these issues by making the product surface itself respond directly to voice with deterministic pricing and verified reservation passes.
+ORA replaces this with an embodied spatial agent that directly controls visual surfaces and delivers verified, itemized transactions.
 
 ---
 
