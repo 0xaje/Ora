@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
-import { SpatialAction, SpaceId } from "../../domain/spatial";
+import { SpatialAction, SpaceId, AmbianceId } from "../../domain/spatial";
 import {
   OraState,
   OraSessionContext,

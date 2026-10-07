@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle } from "react";
+import { useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle } from "react";
 import "../../styles/scrollHero.css";
 import {
   CameraTimelineController,
@@ -29,7 +29,7 @@ export interface ScrollHeroProps {
 }
 
 export const ScrollHero = forwardRef<ScrollHeroHandle, ScrollHeroProps>(
-  ({ onSequenceComplete, onCtaClick }, ref) => {
+  ({ onSequenceComplete, onCtaClick: _onCtaClick }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
