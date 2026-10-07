@@ -317,4 +317,152 @@ describe("Phase 3: Fast-Path & Conversational End-to-End Flow", () => {
     assert.equal(res.decision.type, "BOOKING_INTENT");
     assert.ok(res.spokenResponse.includes("private stays"));
   });
+
+  test("Natural Phrasing: 'My name is John, check in October 9, check out October 12' initiates transaction", async () => {
+    const res = await executeOraRequest(
+      "My name is John, check in October 9, check out October 12",
+      provider,
+      context
+    );
+
+    assert.ok(res.decision);
+    assert.equal(res.decision.type, "INITIATE_TRANSACTION");
+    if (res.decision.type === "INITIATE_TRANSACTION") {
+      assert.equal(res.decision.guestName, "John");
+      assert.ok(res.decision.checkIn?.endsWith("-10-09"));
+      assert.ok(res.decision.checkOut?.endsWith("-10-12"));
+    }
+
+    assert.equal(res.spokenResponse, "I’ve prepared your reservation request for Aurelia.");
+  });
+
+  test("Multi-Turn Booking Flow: Inquire to book -> provide name & stay dates with check out phrasing", async () => {
+    const session = { history: [], recentTurns: [] };
+
+    // Turn 1: User expresses desire to book
+    const turn1 = await executeOraRequest("I want to reserve the shortlet.", provider, context, session);
+    assert.equal(turn1.decision?.type, "CLARIFICATION");
+    assert.ok(turn1.spokenResponse.includes("name and your desired check-in and check-out dates"));
+
+    // Turn 2: User provides name and stay dates: 'My name is Oye, I want to be in here for October 9th and check out October 12th'
+    const turn2 = await executeOraRequest(
+      "My name is Oye, I want to be in here for October 9th and check out October 12th",
+      provider,
+      context,
+      session
+    );
+
+    assert.ok(turn2.decision);
+    assert.equal(turn2.decision.type, "INITIATE_TRANSACTION");
+    if (turn2.decision.type === "INITIATE_TRANSACTION") {
+      assert.equal(turn2.decision.guestName, "Oye");
+      assert.ok(turn2.decision.checkIn?.endsWith("-10-09"));
+      assert.ok(turn2.decision.checkOut?.endsWith("-10-12"));
+    }
+    assert.equal(turn2.spokenResponse, "I’ve prepared your reservation request for Aurelia.");
+  });
+
+  test("Multi-Turn Incremental: Turn 1 book -> Turn 2 name only -> Turn 3 dates only", async () => {
+    const session = { history: [], recentTurns: [] };
+
+    // Turn 1
+    const t1 = await executeOraRequest("I want to book the shortlet", provider, context, session);
+    assert.equal(t1.decision?.type, "CLARIFICATION");
+
+    // Turn 2: Name only
+    const t2 = await executeOraRequest("My name is Sarah Connor", provider, context, session);
+    assert.equal(t2.decision?.type, "CLARIFICATION");
+    assert.ok(t2.spokenResponse.includes("Sarah Connor"));
+
+    // Turn 3: Dates only
+    const t3 = await executeOraRequest("from October 9th to October 12th", provider, context, session);
+    assert.equal(t3.decision?.type, "INITIATE_TRANSACTION");
+    if (t3.decision?.type === "INITIATE_TRANSACTION") {
+      assert.equal(t3.decision.guestName, "Sarah Connor");
+      assert.ok(t3.decision.checkIn?.endsWith("-10-09"));
+      assert.ok(t3.decision.checkOut?.endsWith("-10-12"));
+    }
+  });
+
+  test("Day-first natural date range with speech filler: 'My name is John, from 5th to like 8th of October 2026'", async () => {
+    const session = { history: [], recentTurns: [] };
+    const t1 = await executeOraRequest("I want to book a night", provider, context, session);
+    assert.equal(t1.decision?.type, "CLARIFICATION");
+
+    const t2 = await executeOraRequest("My name is John, from 5th to like 8th of October 2026", provider, context, session);
+    assert.equal(t2.decision?.type, "INITIATE_TRANSACTION");
+    if (t2.decision?.type === "INITIATE_TRANSACTION") {
+      assert.equal(t2.decision.guestName, "John");
+      assert.equal(t2.decision.checkIn, "2026-10-05");
+      assert.equal(t2.decision.checkOut, "2026-10-08");
+    }
+    assert.equal(t2.spokenResponse, "I’ve prepared your reservation request for Aurelia.");
+  });
+
+  test("Graceful Topic Switch: User deflects from booking to 'let me see the whole house' without reservation trap", async () => {
+    const session = { history: [], recentTurns: [] };
+    const t1 = await executeOraRequest("I want to book", provider, context, session);
+    assert.ok(t1.decision);
+
+    const t2 = await executeOraRequest("let me see the whole house", provider, context, session);
+    assert.equal(t2.decision?.type, "START_TOUR");
+    assert.equal(t2.spokenResponse, "Of course. Let us tour Aurelia Sanctuary step-by-step.");
+
+    const t3 = await executeOraRequest("let me see the sunset", provider, context, session);
+    assert.equal(t3.decision?.type, "CHANGE_AMBIANCE");
+    if (t3.decision?.type === "CHANGE_AMBIANCE") {
+      assert.equal(t3.decision.ambiance, "sunset");
+    }
+
+    const t4 = await executeOraRequest("let me see the building", provider, context, session);
+    assert.equal(t4.decision?.type, "SHOW_SPACE");
+    if (t4.decision?.type === "SHOW_SPACE") {
+      assert.equal(t4.decision.spaceId, "exterior");
+    }
+  });
+
+  test("Graceful Cancellation: 'never mind' cleanly exits reservation mode", async () => {
+    const session = { history: [], recentTurns: [] };
+    await executeOraRequest("I want to reserve the shortlet", provider, context, session);
+
+    const cancel = await executeOraRequest("never mind", provider, context, session);
+    assert.equal(cancel.decision?.type, "PROPERTY_ANSWER");
+    assert.ok(cancel.spokenResponse.includes("Understood"));
+  });
+
+  test("Billing Flow: 'prepare me my bills' on cold start requests stay dates", async () => {
+    const session = { history: [], recentTurns: [] };
+    const res = await executeOraRequest("prepare me my bills", provider, context, session);
+    assert.equal(res.decision?.type, "CLARIFICATION");
+    assert.ok(res.spokenResponse.includes("prepare your bill and reservation pass"));
+  });
+
+  test("Billing Flow: 'from 5th to 8th of October 2026. Prepare me my bills' immediately initiates bill pass", async () => {
+    const session = { history: [], recentTurns: [] };
+    const res = await executeOraRequest("from 5th to 8th of October 2026. Prepare me my bills", provider, context, session);
+    assert.equal(res.decision?.type, "INITIATE_TRANSACTION");
+    if (res.decision?.type === "INITIATE_TRANSACTION") {
+      assert.equal(res.decision.checkIn, "2026-10-05");
+      assert.equal(res.decision.checkOut, "2026-10-08");
+    }
+    assert.equal(res.spokenResponse, "I’ve prepared your bill and reservation pass for Aurelia Sanctuary.");
+  });
+
+  test("Billing Flow: 'prepare my bill' inherits existing reservation from store", async () => {
+    reservationStore.create({
+      guestName: "Oye",
+      checkIn: "2026-10-05",
+      checkOut: "2026-10-08"
+    });
+
+    const session = { history: [], recentTurns: [] };
+    const res = await executeOraRequest("prepare me my bills", provider, context, session);
+    assert.equal(res.decision?.type, "INITIATE_TRANSACTION");
+    if (res.decision?.type === "INITIATE_TRANSACTION") {
+      assert.equal(res.decision.guestName, "Oye");
+      assert.equal(res.decision.checkIn, "2026-10-05");
+      assert.equal(res.decision.checkOut, "2026-10-08");
+    }
+    assert.equal(res.spokenResponse, "I’ve prepared your bill and reservation pass for Aurelia Sanctuary.");
+  });
 });

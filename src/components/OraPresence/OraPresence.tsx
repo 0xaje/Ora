@@ -91,39 +91,75 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
     }
   }, []);
 
-  const TOUR_STOPS: Array<{ spaceId: SpaceId; narration: string }> = useMemo(
+  const TOUR_STOPS: Array<{ spaceId?: SpaceId; ambiance?: AmbianceId; narration: string; pauseMs?: number }> = useMemo(
     () => [
+      // 1. Exterior in crisp morning daylight
       {
         spaceId: "exterior",
-        narration: "Welcome to Aurelia Sanctuary. Let us explore the estate from the arrival runway."
+        ambiance: "day",
+        narration: "Welcome to Aurelia Sanctuary. Let us explore the modernist estate in crisp morning daylight.",
+        pauseMs: 2000
       },
+      // 2. Exterior at sunset
+      {
+        ambiance: "sunset",
+        narration: "At sunset, golden hour illuminates the highland canyon and basalt contours.",
+        pauseMs: 2200
+      },
+      // 3. Exterior at night
+      {
+        ambiance: "night",
+        narration: "And into the evening, starry skies frame the architectural reflection pools.",
+        pauseMs: 2200
+      },
+      // 4. Step inside to Entrance Canopy (return to day for crystal clarity)
       {
         spaceId: "entrance",
-        narration: "Step inside past the cedar canopy and reflection water channel."
+        ambiance: "day",
+        narration: "Let us step inside past the cedar canopy and reflection water channel.",
+        pauseMs: 2000
       },
+      // 5. Sunken Living Lounge
       {
         spaceId: "living_room",
-        narration: "Here is the sunken living lounge with panoramic canyon views."
+        narration: "Here is the sunken living lounge with cedar ceilings and floor-to-ceiling canyon glass.",
+        pauseMs: 2200
       },
+      // 6. Gourmet Kitchen
       {
         spaceId: "kitchen",
-        narration: "Next, the gourmet kitchen and Calacatta marble dining island."
+        narration: "Next, the gourmet kitchen and Calacatta marble dining island.",
+        pauseMs: 2000
       },
+      // 7. Gallery Corridor
       {
         spaceId: "hallway",
-        narration: "The central gallery corridor leads to the secluded private wing."
+        narration: "The central gallery corridor connects directly into the private guest wing.",
+        pauseMs: 1800
       },
+      // 8. Master Bedroom Suite
       {
         spaceId: "master_bedroom",
-        narration: "The master bedroom suite opens to panoramic mountain dawns."
+        narration: "The master bedroom suite opens to panoramic mountain dawns.",
+        pauseMs: 2200
       },
+      // 9. Primary Ensuite Spa
       {
         spaceId: "ensuite_bathroom",
-        narration: "The primary ensuite features a stone soaking tub framing a private cactus courtyard."
+        narration: "The primary ensuite features a stone soaking tub framing a private cactus courtyard.",
+        pauseMs: 2200
       },
+      // 10. Infinity Pool Terrace
       {
         spaceId: "infinity_pool",
-        narration: "And finally, the cantilevered infinity pool with 270-degree sunset vistas."
+        narration: "And the cantilevered infinity pool terrace with 270-degree sunset vistas.",
+        pauseMs: 2200
+      },
+      // 11. Move back to the beginning / outside
+      {
+        spaceId: "exterior",
+        narration: "And returning to the arrival approach. Let me know whenever you would like to reserve Aurelia or prepare your vacation stay.",
+        pauseMs: 1500
       }
     ],
     []
@@ -141,8 +177,15 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
         if (!isTourActiveRef.current || controller.signal.aborted) break;
         const stop = TOUR_STOPS[i];
 
-        // 1. Move camera / display to space
-        onSpatialAction({ type: "SHOW_SPACE", spaceId: stop.spaceId });
+        // 1. Move camera / display to space if present
+        if (stop.spaceId) {
+          onSpatialAction({ type: "SHOW_SPACE", spaceId: stop.spaceId });
+        }
+
+        // 1.5. Change environmental ambiance if present
+        if (stop.ambiance) {
+          onSpatialAction({ type: "SHOW_AMBIANCE", ambiance: stop.ambiance });
+        }
 
         // 2. Vocalize narration
         try {
@@ -153,9 +196,10 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
 
         if (!isTourActiveRef.current || controller.signal.aborted) break;
 
-        // 3. Smooth pause (2.4s) to admire the space before proceeding to next
+        // 3. Smooth pause to admire the space before proceeding to next
+        const pauseDuration = stop.pauseMs ?? 2200;
         await new Promise<void>((resolve) => {
-          const timer = setTimeout(resolve, 2400);
+          const timer = setTimeout(resolve, pauseDuration);
           controller.signal.addEventListener("abort", () => {
             clearTimeout(timer);
             resolve();
@@ -193,7 +237,9 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
     isListening,
     partialTranscript,
     startListening,
-    stopListening
+    stopListening,
+    pauseStreaming,
+    resumeListening
   } = useVoiceSession({
     continuous: true,
     onStateChange: (state) => {
@@ -221,7 +267,11 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
     },
     onFinalUtterance: async (finalUtterance) => {
       setIsOpen(false);
-      await submitQuery(finalUtterance);
+      try {
+        await submitQuery(finalUtterance);
+      } catch (err) {
+        console.warn("[Ora] Submit query error:", err);
+      }
     },
     onError: () => {
       // Do not overwrite welcome greeting if cold unprompted mic access was pending gesture
@@ -291,8 +341,13 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
         const isClarification = result.interpretation.type === "CLARIFICATION_REQUIRED";
         setOraState(isClarification ? "clarification" : "responding");
 
-        // 4. Vocalize response with speech synthesis (cancellable by user barge-in)
-        await speechOutput.speak(result.spokenResponse);
+        // 4. Vocalize response with speech synthesis (cancellable by user interaction)
+        pauseStreaming();
+        try {
+          await speechOutput.speak(result.spokenResponse);
+        } finally {
+          resumeListening();
+        }
 
         // 5. Seamlessly return to listening if not barged into
         setOraState((prev) => {
@@ -309,7 +364,7 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
         throw err;
       }
     },
-    [context, onSpatialAction, provider, isOpen, startGrandTour, stopTour]
+    [context, onSpatialAction, provider, isOpen, startGrandTour, stopTour, pauseStreaming, resumeListening]
   );
 
   /**
@@ -326,6 +381,7 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
 
     // 2. Vocalize welcome greeting out loud
     if (!hasSpokenWelcomeRef.current) {
+      pauseStreaming();
       speechOutput
         .speak(WELCOME_GREETING)
         .then((spoken) => {
@@ -333,7 +389,10 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
             hasSpokenWelcomeRef.current = true;
           }
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(() => {
+          resumeListening();
+        });
     }
 
     // 3. Activate continuous microphone hands-free
@@ -347,7 +406,7 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
         setOraState("idle");
       }
     }
-  }, [showWhisper, startListening, isListening]);
+  }, [showWhisper, startListening, isListening, pauseStreaming, resumeListening]);
 
   // Auto-welcome and auto-listen on mount
   useEffect(() => {
@@ -569,14 +628,6 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
       className="ora-presence-container"
       aria-label="Ora Intelligent Sanctuary Presence"
     >
-      {/* Live Voice Transcript (Only shown while visitor is actively speaking into mic) */}
-      {isListening && partialTranscript && (
-        <div className="ora-whisper-bubble" role="status" aria-live="polite">
-          <span className="ora-whisper-kicker">YOU</span>
-          <p className="ora-whisper-text">“{partialTranscript}”</p>
-        </div>
-      )}
-
       {/* Compact Input Surface (Revealed upon clicking Ora) */}
       {isOpen && (
         <form className="ora-input-surface" onSubmit={handleSubmit}>
@@ -637,7 +688,7 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
       )}
 
       {/* Hands-Free Active Microphone Indicator */}
-      {isListening && !whisperText && !partialTranscript && (
+      {isListening && !whisperText && !isOpen && (
         <div className="ora-mic-live-badge" aria-label="Microphone live and listening">
           <span className="ora-mic-live-dot" aria-hidden="true" />
           <span className="ora-mic-live-label">Listening</span>

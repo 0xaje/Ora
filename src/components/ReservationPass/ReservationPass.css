@@ -1,87 +1,101 @@
 /**
  * AURELIA — Reservation Pass Luxury Glassmorphic Styles
+ * Hoisted directly above the Ora Presence sculptural triangle
  */
 
 .reservation-pass-overlay {
   position: fixed;
-  inset: 0;
-  z-index: 9985;
+  bottom: 104px;
+  right: 36px;
+  z-index: 9995;
+  pointer-events: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  animation: passFadeIn 350ms var(--ease-spring) forwards;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .reservation-pass-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(4, 5, 7, 0.25);
-  cursor: pointer;
+  display: none;
 }
 
 .reservation-pass-card {
   position: relative;
-  width: 100%;
-  max-width: 520px;
+  width: 395px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 130px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.4) transparent;
   background: linear-gradient(
     145deg,
-    rgba(22, 25, 30, 0.90) 0%,
-    rgba(12, 14, 18, 0.94) 100%
+    rgba(20, 23, 29, 0.96) 0%,
+    rgba(10, 12, 16, 0.98) 100%
   );
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(212, 175, 55, 0.28);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(212, 175, 55, 0.35);
   box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(212, 175, 55, 0.12),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 2.25rem 2rem;
+    0 0 35px rgba(212, 175, 55, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 1.4rem 1.5rem;
   color: var(--color-text-primary);
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  animation: passSlideIn 350ms var(--ease-spring) forwards;
+  gap: 1.1rem;
   pointer-events: auto;
   cursor: default;
+  transform-origin: bottom right;
+  animation: passHoistUp 380ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes passFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Downward arrow notch pointing directly toward Ora presence triangle */
+.reservation-pass-card::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  right: 22px;
+  width: 14px;
+  height: 14px;
+  background: rgba(10, 12, 16, 0.98);
+  border-right: 1px solid rgba(212, 175, 55, 0.35);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+  transform: rotate(45deg);
+  pointer-events: none;
 }
 
-@keyframes passSlideIn {
+@keyframes passHoistUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(22px) scale(0.92);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .reservation-pass-close {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--color-text-secondary);
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 200ms ease;
+  z-index: 2;
 }
 
 .reservation-pass-close:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.16);
   color: var(--color-text-primary);
   transform: rotate(90deg);
 }
@@ -91,7 +105,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding-right: 2rem;
+  padding-right: 2.2rem;
 }
 
 .pass-brand-mark {
@@ -101,7 +115,7 @@
 
 .pass-brand-name {
   font-family: var(--font-serif);
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 500;
   letter-spacing: 0.18em;
   color: #fff;
@@ -109,7 +123,7 @@
 }
 
 .pass-brand-subtitle {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 0.32em;
   color: var(--color-bronze-accent);
   font-weight: 600;
@@ -120,21 +134,22 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .pass-type-badge {
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
   color: var(--color-text-secondary);
   font-weight: 600;
+  text-align: right;
 }
 
 .pass-status-pill {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 0.25rem 0.65rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.55rem;
   border-radius: 999px;
   text-transform: uppercase;
 }
@@ -174,23 +189,61 @@
 .pass-body {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.95rem;
+}
+
+/* Space / Accommodation Row */
+.pass-space-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 8px;
+}
+
+.space-value-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.space-name {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.space-scope {
+  font-size: 0.7rem;
+  color: var(--color-bronze-accent);
+  letter-spacing: 0.02em;
+  opacity: 0.9;
 }
 
 .pass-grid-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
+  gap: 0.85rem;
 }
 
 .pass-field {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.25rem;
+}
+
+.pass-field-highlight {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
 }
 
 .field-label {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -198,7 +251,7 @@
 }
 
 .field-value {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--color-text-primary);
   font-weight: 500;
 }
@@ -207,25 +260,33 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   color: var(--color-bronze-accent);
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+}
+
+.field-tag-hint {
+  font-size: 0.62rem;
+  color: var(--color-bronze-accent);
+  letter-spacing: 0.01em;
+  margin-top: 0.15rem;
+  opacity: 0.85;
 }
 
 .rate-unit {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--color-text-muted);
   font-weight: normal;
 }
 
 /* Total Box */
 .pass-total-box {
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(212, 175, 55, 0.25);
   border-radius: 8px;
-  padding: 1rem 1.25rem;
+  padding: 0.85rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.25rem;
 }
 
 .total-label-wrap {
@@ -234,28 +295,28 @@
 }
 
 .total-title {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--color-text-secondary);
 }
 
 .total-note {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--color-text-muted);
   margin-top: 0.15rem;
 }
 
 .total-amount {
   font-family: var(--font-serif);
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-bronze-accent);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 .currency-tag {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-family: var(--font-sans);
   color: var(--color-text-muted);
   font-weight: 600;
@@ -265,27 +326,27 @@
 .pass-actions {
   display: flex;
   flex-direction: column;
-  margin-top: 0.5rem;
+  margin-top: 0.35rem;
 }
 
 .pass-whatsapp-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   width: 100%;
-  padding: 0.9rem 1.5rem;
+  padding: 0.85rem 1.4rem;
   border-radius: 8px;
   background: linear-gradient(
     135deg,
-    rgba(212, 175, 55, 0.22) 0%,
-    rgba(212, 175, 55, 0.12) 50%,
-    rgba(18, 20, 24, 0.8) 100%
+    rgba(212, 175, 55, 0.24) 0%,
+    rgba(212, 175, 55, 0.14) 50%,
+    rgba(18, 20, 24, 0.85) 100%
   );
-  border: 1px solid rgba(212, 175, 55, 0.45);
+  border: 1px solid rgba(212, 175, 55, 0.5);
   color: #ffffff;
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -301,13 +362,13 @@
 .pass-whatsapp-btn:hover {
   background: linear-gradient(
     135deg,
-    rgba(212, 175, 55, 0.32) 0%,
-    rgba(212, 175, 55, 0.2) 50%,
-    rgba(24, 28, 34, 0.9) 100%
+    rgba(212, 175, 55, 0.34) 0%,
+    rgba(212, 175, 55, 0.22) 50%,
+    rgba(24, 28, 34, 0.95) 100%
   );
-  border-color: rgba(212, 175, 55, 0.7);
+  border-color: rgba(212, 175, 55, 0.75);
   box-shadow:
-    0 6px 24px rgba(212, 175, 55, 0.2),
+    0 6px 24px rgba(212, 175, 55, 0.22),
     0 2px 8px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
@@ -326,8 +387,8 @@
 }
 
 .whatsapp-icon {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   color: #25d366;
   flex-shrink: 0;
   transition: transform 250ms ease;
@@ -337,16 +398,102 @@
   transform: scale(1.08);
 }
 
+.pass-btn-subhint {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: 0.4rem;
+  letter-spacing: 0.02em;
+}
+
 /* Footer */
 .pass-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 0.9rem;
+  padding-top: 0.75rem;
 }
 
 .pass-truth-disclaimer {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--color-text-muted);
   line-height: 1.4;
   text-align: center;
   font-style: italic;
+  margin: 0;
+}
+
+/* Floating Re-Open Pill (when pass is minimized but reservation exists) */
+.ora-pass-reopen-pill {
+  position: fixed;
+  bottom: 104px;
+  right: 36px;
+  z-index: 9991;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.95rem;
+  background: rgba(18, 20, 26, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(212, 175, 55, 0.15);
+  transition: all 200ms ease;
+  animation: passHoistUp 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ora-pass-reopen-pill:hover {
+  background: rgba(26, 30, 38, 0.98);
+  border-color: rgba(212, 175, 55, 0.8);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.3);
+  transform: translateY(-2px);
+}
+
+.pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-bronze-accent);
+  box-shadow: 0 0 8px var(--color-bronze-accent);
+}
+
+.pill-ref {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--color-bronze-accent);
+  font-size: 0.75rem;
+}
+
+.pill-label {
+  color: #f5f2ed;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .reservation-pass-overlay {
+    bottom: 96px;
+    right: 16px;
+    left: 16px;
+    align-items: center;
+  }
+
+  .reservation-pass-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .reservation-pass-card::after {
+    right: 32px;
+  }
+
+  .ora-pass-reopen-pill {
+    bottom: 96px;
+    right: 16px;
+  }
 }

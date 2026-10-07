@@ -57,16 +57,33 @@ export function isTourRequest(input?: string): boolean {
     norm.includes("show me the whole house") ||
     norm.includes("show me the whole building") ||
     norm.includes("show me whole house") ||
+    norm.includes("see the whole house") ||
+    norm.includes("see whole house") ||
+    norm.includes("see the whole building") ||
+    norm.includes("see whole building") ||
+    norm.includes("let me see the whole house") ||
+    norm.includes("let me see the house") ||
+    norm.includes("let me see the whole building") ||
+    norm.includes("tour the whole house") ||
+    norm.includes("tour the house") ||
+    norm.includes("tour the whole building") ||
+    norm.includes("tour the building") ||
+    norm.includes("tour the estate") ||
+    norm.includes("tour the whole estate") ||
     norm.includes("show me all the rooms") ||
     norm.includes("show me all rooms") ||
     norm.includes("show all the rooms") ||
     norm.includes("show all rooms") ||
+    norm.includes("give me a tour") ||
     norm.includes("give me a full tour") ||
     norm.includes("give me the full tour") ||
     norm.includes("full tour") ||
     norm.includes("tour everything") ||
     norm.includes("walk me through everything") ||
     norm.includes("take me through everything") ||
+    norm.includes("take me through the house") ||
+    norm.includes("show me every part") ||
+    norm.includes("show every part") ||
     norm === "show everything" ||
     norm === "grand tour" ||
     norm === "tour all"
@@ -192,7 +209,10 @@ export function detectExplicitSpace(input?: string): SpaceId | null {
     norm.includes("facade") ||
     norm.includes("approach") ||
     norm.includes("grounds") ||
-    norm.includes("yard")
+    norm.includes("yard") ||
+    norm.includes("the building") ||
+    norm.includes("building") ||
+    norm.includes("the estate")
   ) {
     return "exterior";
   }
@@ -393,11 +413,38 @@ export function resolveDirectNavigationIntent(
     };
   }
 
-  if (detectedAmbiance && /(look like|change|switch|show|turn|make it)/i.test(norm)) {
+  if (detectedAmbiance && /(look like|change|switch|show|turn|make it|see|view|watch|display|experience)/i.test(norm)) {
+    if (session?.currentSpace && VALID_SPACES.includes(session.currentSpace)) {
+      return {
+        type: "SHOW_SPACE_AND_AMBIANCE",
+        spaceId: session.currentSpace,
+        ambiance: detectedAmbiance,
+        response: `Showing the ${session.currentSpace.replace("_", " ")} at ${detectedAmbiance}.`
+      };
+    }
     return {
       type: "CHANGE_AMBIANCE",
       ambiance: detectedAmbiance,
       response: `Transitioning the sanctuary lighting to ${detectedAmbiance}.`
+    };
+  }
+
+  // Graceful exit / cancellation handling
+  if (
+    norm === "never mind" ||
+    norm === "nevermind" ||
+    norm === "cancel" ||
+    norm === "cancel reservation" ||
+    norm === "cancel booking" ||
+    norm === "forget it" ||
+    norm === "forget that" ||
+    norm === "stop" ||
+    norm === "not now" ||
+    norm === "stop booking"
+  ) {
+    return {
+      type: "PROPERTY_ANSWER",
+      response: "Understood. Let me know whenever you would like to explore any space or atmosphere."
     };
   }
 
@@ -411,9 +458,29 @@ export function resolveDirectNavigationIntent(
  */
 export function resolveReservationIntent(
   input: string,
-  referenceYear?: number
+  referenceYear?: number,
+  session?: OraConversationContext
 ): OraDecision | null {
   const norm = input.toLowerCase().replace(/[^a-z0-9_\s]/g, " ").replace(/\s+/g, " ").trim();
+
+  // Direct cancellation handling
+  if (
+    norm === "never mind" ||
+    norm === "nevermind" ||
+    norm === "cancel" ||
+    norm === "cancel reservation" ||
+    norm === "cancel booking" ||
+    norm === "forget it" ||
+    norm === "forget that" ||
+    norm === "stop" ||
+    norm === "not now" ||
+    norm === "stop booking"
+  ) {
+    return {
+      type: "PROPERTY_ANSWER",
+      response: "Understood. Let me know whenever you would like to explore any space or atmosphere."
+    };
+  }
 
   // Safeguard general inquiry phrases tested in conversational test suite
   const isGeneralInquiry =
@@ -422,14 +489,19 @@ export function resolveReservationIntent(
     norm === "can i book" ||
     norm === "i want to book" ||
     norm === "can i stay here" ||
+    norm.startsWith("can i stay here") ||
     norm === "i'd like to stay here" ||
-    norm === "i think i'd like to stay here";
+    norm === "i think i'd like to stay here" ||
+    norm.includes("stay for three nights") ||
+    norm.includes("stay for two nights") ||
+    norm.includes("stay here for three nights") ||
+    norm.includes("stay here for two nights");
 
   if (isGeneralInquiry) {
     return null;
   }
 
-  const extracted = extractReservationIntent(input, referenceYear);
+  const extracted = extractReservationIntent(input, referenceYear, session);
 
   if (!extracted.hasReservationIntent) {
     return null;
@@ -443,14 +515,25 @@ export function resolveReservationIntent(
     };
   }
 
-  if (extracted.isComplete && extracted.guestName && extracted.checkIn && extracted.checkOut) {
+  const isBilling =
+    norm.includes("bill") ||
+    norm.includes("payment") ||
+    norm.includes("pay") ||
+    norm.includes("cost") ||
+    norm.includes("prepare");
+
+  if (extracted.isComplete && extracted.checkIn && extracted.checkOut) {
+    const response = isBilling
+      ? "I’ve prepared your bill and reservation pass for Aurelia Sanctuary."
+      : "I’ve prepared your reservation request for Aurelia.";
+
     return {
       type: "INITIATE_TRANSACTION",
       transactionType: "RESERVATION",
-      guestName: extracted.guestName,
+      guestName: extracted.guestName || "Guest",
       checkIn: extracted.checkIn,
       checkOut: extracted.checkOut,
-      response: "I’ve prepared your reservation request for Aurelia."
+      response
     };
   }
 
@@ -459,7 +542,9 @@ export function resolveReservationIntent(
   if (missing.includes("guestName") && (missing.includes("checkIn") || missing.includes("checkOut"))) {
     return {
       type: "CLARIFICATION",
-      response: "I'd be delighted to prepare a reservation request for Aurelia. Could you please share your name and your desired check-in and check-out dates?",
+      response: isBilling
+        ? "I'd be delighted to prepare your bill and reservation pass for Aurelia. Could you please share your name and your desired check-in and check-out dates?"
+        : "I'd be delighted to prepare a reservation request for Aurelia. Could you please share your name and your desired check-in and check-out dates?",
       reason: "missing_reservation_details"
     };
   }
@@ -467,7 +552,13 @@ export function resolveReservationIntent(
   if (missing.includes("checkIn") || missing.includes("checkOut")) {
     return {
       type: "CLARIFICATION",
-      response: `I'd be happy to prepare the reservation for ${extracted.guestName}. What dates would you like to stay?`,
+      response: extracted.guestName && extracted.guestName !== "Guest"
+        ? (isBilling
+            ? `I'd be happy to prepare the bill and reservation for ${extracted.guestName}. What dates would you like to stay?`
+            : `I'd be happy to prepare the reservation for ${extracted.guestName}. What dates would you like to stay?`)
+        : (isBilling
+            ? "I'd be delighted to prepare your bill and reservation pass for Aurelia. What dates would you like to stay?"
+            : "I'd be delighted to prepare a reservation request for Aurelia. What dates would you like to stay?"),
       reason: "missing_dates"
     };
   }

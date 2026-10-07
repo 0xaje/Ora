@@ -411,40 +411,9 @@ export const ScrollHero = forwardRef<ScrollHeroHandle, ScrollHeroProps>(
     };
   }, [onSequenceComplete, renderFrame]);
 
-  // Compute Z-axis fade-out style for hero text, description, and call to action
-  // Immediately as scroll starts (0 to 0.05 progress), fade out and move in Z axis
-  const FADE_THRESHOLD = 0.05;
-  const fadeNormalized = Math.min(1, scrollProgress / FADE_THRESHOLD);
-  const heroOpacity = Math.max(0, 1 - fadeNormalized);
-  const heroTranslateZ = fadeNormalized * 150; // Moves towards camera along Z-axis
-  const heroScale = 1 + fadeNormalized * 0.12;
-  const heroBlur = fadeNormalized * 4;
-  const isHeroInteractive = scrollProgress < 0.03;
-
-  const heroOverlayStyle: React.CSSProperties = {
-    opacity: heroOpacity,
-    transform: `perspective(1000px) translateZ(${heroTranslateZ}px) scale(${heroScale})`,
-    filter: heroBlur > 0.1 ? `blur(${heroBlur.toFixed(1)}px)` : undefined,
-    pointerEvents: isHeroInteractive ? "auto" : "none",
-    visibility: heroOpacity <= 0 ? "hidden" : "visible",
-    willChange: "transform, opacity, filter"
-  };
-
-  const handleScrollDownClick = () => {
-    if (onCtaClick) {
-      onCtaClick();
-      return;
-    }
-
-    if (containerRef.current) {
-      const targetPosition =
-        containerRef.current.offsetTop + containerRef.current.offsetHeight - window.innerHeight + 50;
-      window.scrollTo({
-        top: targetPosition,
-        behavior: "smooth"
-      });
-    }
-  };
+  // Fade out the title as user scrolls — gone by ~30% through the sequence
+  const titleOpacity = Math.max(0, 1 - scrollProgress * 3.2);
+  const titleTranslateY = scrollProgress * -48;
 
   return (
     <section className="scroll-hero-container" ref={containerRef} aria-label="Aurelia Interactive Architecture Hero">
@@ -455,44 +424,22 @@ export const ScrollHero = forwardRef<ScrollHeroHandle, ScrollHeroProps>(
         {/* Ambient Vignette Overlay */}
         <div className="scroll-hero-vignette" />
 
-        {/* Hero Content Overlay with 3D Z-Axis Fade-Out */}
-        <div className="scroll-hero-overlay" style={heroOverlayStyle}>
-          <div className="hero-content-wrapper">
-            <div className="hero-kicker-badge">
-              <span className="kicker-line" />
-              <span className="kicker-text">HILLSIDE SANCTUARY</span>
-              <span className="kicker-line" />
-            </div>
-
-            <h1 className="hero-brand-title">AURELIA</h1>
-
-            <p className="hero-tagline-description">
-              A secluded modernist retreat nestled above the highland valley. Talk to the sanctuary, feel the
-              architecture.
-            </p>
-
-            <div className="hero-cta-group">
-              <button
-                type="button"
-                className="hero-primary-cta"
-                onClick={handleScrollDownClick}
-                aria-label="Begin Sanctuary Journey"
-              >
-                <span>Begin Journey</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <polyline points="19 12 12 19 5 12" />
-                </svg>
-              </button>
-
-              <div className="scroll-hint-pill">
-                <span className="mouse-wheel-icon">
-                  <span className="wheel-dot" />
-                </span>
-                <span className="hint-label">Scroll to explore</span>
-              </div>
-            </div>
-          </div>
+        {/* Cinematic Brand Title — fades & lifts as user scrolls in */}
+        <div
+          className="hero-wordmark-overlay"
+          style={{
+            opacity: titleOpacity,
+            transform: `translateY(${titleTranslateY}px)`,
+            pointerEvents: titleOpacity < 0.05 ? "none" : "auto"
+          }}
+          aria-hidden={titleOpacity < 0.05}
+        >
+          <h1 className="hero-wordmark-title">AURELIA</h1>
+          <p className="hero-wordmark-tagline">
+            <span className="tagline-line">A Place to Stay.</span>
+            <span className="tagline-sep" aria-hidden="true" />
+            <span className="tagline-line">A Place to Feel.</span>
+          </p>
         </div>
 
         {/* Minimal Progress Line along bottom edge */}

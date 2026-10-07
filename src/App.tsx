@@ -223,13 +223,24 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* Luxury Shortlet Reservation Pass (Phase 3) */}
-      {activeReservation && (
+      {/* Luxury Shortlet Reservation Pass (Hoisted above Ora Triangle) */}
+      {activeReservation ? (
         <ReservationPass
           reservation={activeReservation}
           onClose={() => setActiveReservation(null)}
         />
-      )}
+      ) : reservationStore.getLatest() ? (
+        <button
+          type="button"
+          className="ora-pass-reopen-pill"
+          onClick={() => setActiveReservation(reservationStore.getLatest())}
+          aria-label={`View Bill & Reservation Pass: ${reservationStore.getLatest()?.reference}`}
+        >
+          <span className="pill-dot" aria-hidden="true" />
+          <span className="pill-ref">{reservationStore.getLatest()?.reference}</span>
+          <span className="pill-label">View Bill</span>
+        </button>
+      ) : null}
     </main>
   );
 };
