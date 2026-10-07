@@ -1,25 +1,43 @@
-# 3-Minute Video Demonstration Plan — AURELIA
+# 3-Minute Video Demonstration Plan & Breakdown — ORA / AURELIA
 
-> **Target Duration:** 2 minutes 30 seconds (Hard limit: under 3:00)  
-> **Core Principle:** Show the product WORKING live on screen. Prioritize genuine voice interaction and spatial response over slides.
+> **Official Demo Video:** [`ora_complete_hackathon_demo.mp4`](file:///home/oyeolorun/ora-concept-film/out/ora_complete_hackathon_demo.mp4)  
+> **Total Duration:** 2 minutes 46.9 seconds (Under the hard 3:00 limit)  
+> **Core Principle:** First establish the universal ORA paradigm shift (the product itself becomes conversational), then provide authentic live proof on the AURELIA Sanctuary reference environment.
 
 ---
 
-## Timeline & Scene Choreography
+## Part 1: High-Concept ORA Paradigm Intro (0:00 – 0:30)
 
-| Timestamp | Screen Action | Voice / Spoken Script | Technical Highlight |
+*Rendered via Remotion (`ora-concept-film`) with high-legibility typography, locked cursor, and living motion-white atmosphere.*
+
+| Timestamp | Visual Action | Narration / Audio | Architectural Thesis |
 | :--- | :--- | :--- | :--- |
-| **0:00 – 0:25** | **The Thesis & Arrival:**<br>Full screen view of Aurelia Sanctuary landing page. Unmute atmospheric audio. Smoothly scroll through the 300-frame canvas hero. | *"Traditional estate booking is broken by endless filter dropdowns and disconnected chatbots. With Aurelia, the architectural space itself is the interface."* | Hardware-accelerated 300-frame photographic canvas + WebAudio soundscape. |
-| **0:25 – 0:55** | **Spatial & Ambiance Voice Control:**<br>Mic active. Speak naturally to ORA. | **Speaker:** *"Ora, show me the living room at sunset."*<br>**Ora:** *"Here is the living room at sunset."* | AssemblyAI v3 streaming STT, <1ms fast-path intent router, camera scrubs to living room, lighting warms to sunset, audio ducks. |
-| **0:55 – 1:20** | **Architectural Detail & Instant Barge-In:**<br>Request a detail sanctuary space, then interrupt Ora. | **Speaker:** *"Show me the master bedroom."*<br>*(Placard centers)*<br>**Ora begins speaking...**<br>**Speaker (interrupts):** *"Actually, let's see the infinity pool."* | Spatial detail view centering + immediate voice barge-in canceling active speech. |
-| **1:20 – 1:45** | **Autonomous Grand Tour:**<br>Initiate guided exploration. | **Speaker:** *"Give me a tour of the sanctuary."*<br>*(Ora guides sequential camera tour across estate spaces with concierge narration)* | Autonomous multi-stop tour sequencer with timed camera moves and narration. |
-| **1:45 – 2:15** | **Spoken Reservation Request:**<br>Initiate verified stay booking. | **Speaker:** *"Ora, I'd like to reserve Aurelia for John from October 9th to October 11th."*<br>**Ora:** *"I've prepared your reservation request for Aurelia."*<br>*(Glassmorphic Reservation Pass animates into view)* | Natural language entity extraction (name + dates), deterministic pricing ($1,850 × 2 = $3,700), dynamic `AUR-YYYY-XXXX` reference. |
-| **2:15 – 2:35** | **Mobile WhatsApp Handoff:**<br>Inspect the itemized Reservation Pass and click CTA. | *(Cursor clicks **"Continue on WhatsApp"**)*<br>*(Browser tab opens with prefilled WhatsApp message containing dates, reference, and total)* | Client-side URL-encoded `wa.me` deep link, state transitions to `HANDOFF_OPENED`. |
-| **2:35 – 2:50** | **Closing Summary:**<br>Brief architecture slide or camera overview. | *"ORA proves that conversational AI can move beyond text boxes to embody high-value spaces and drive real commerce — running locally and privately on open models like Ollama with zero cloud API costs. Built for Devpost Build With AI: Basics."* | Product Adapter architecture, local Ollama execution ($0 API cost), 261 automated tests, MIT open-source repository. |
+| **0:00 – 0:05** | **Scene 1 — The Problem:**<br>Generic software interface (`Studio Pro`). Cursor maneuvers through complex resolution, color profile, and subtitle menus before locking into gridlock. | *"Every digital product has an interface you have to learn."* | Conventional software traps users in endless menus, dropdowns, and filter overload. |
+| **0:05 – 0:10** | **Scene 2 — The Question:**<br>Visual collapse to a gold horizon line with pulsing audio waveforms. Bold `V O I C E` reveal. | *"What if you could just talk to the product instead?"* | The paradigm transition from manual clicks to natural conversation. |
+| **0:10 – 0:15** | **Scene 3 — The Architecture:**<br>Three-part pipeline: **Natural Human Voice** &rarr; radiant **ORA** glyph &rarr; **Direct Product Action**. | *"ORA is a conversational intelligence layer between people and products."* | ORA sits as an embodied action layer connecting intent directly to product state. |
+| **0:15 – 0:20** | **Scene 4 — Universal Superpowers:**<br>Three clear capability cards: **Smart Navigation**, **Direct Action**, and **Seamless Handoff** (supporting WhatsApp, Telegram, or WeChat). | *"It doesn't guess. It coordinates environments and executes verified transactions."* | ORA is product-agnostic: controls deep states, executes deterministic transactions, and bridges to messaging apps. |
+| **0:20 – 0:25** | **Scene 5 — The Core Distinction:**<br>Chatbot dialogue box dissolves away into clear space. Headline: *"Make the product itself conversational."* | *"The idea isn't another chatbot sitting beside a product. It's to make the product itself conversational."* | ORA is not a sidecar chat bubble; the product canvas is the body of the AI. |
+| **0:25 – 0:30** | **Scene 6 — The Bridge to Reality:**<br>Camera pushes forward into the radiant ORA emblem: *"REFERENCE ENVIRONMENT: A U R E L I A — A Conversational Private Residence"*. | *"We built that architecture into AURELIA. Here it is, running live."* | Seamless transition straight into the real, working reference application. |
 
 ---
 
-## Screen Recording Guidelines
-1. **Screen Resolution:** 1080p (1920x1080) at 60fps for smooth canvas scrub visuals.
-2. **Audio Setup:** Enable desktop system audio (to capture WebAudio soundscape and Ora TTS) and microphone input for your spoken questions.
-3. **Pacing:** Speak at a natural, calm cadence; pause briefly after commands to let the spatial transitions breathe.
+## Part 2: Live Screen Demonstration in AURELIA Sanctuary (0:30 – 2:47)
+
+*Recorded live on localhost:5173 with authentic voice interaction, WebAudio soundscape, and hardware-accelerated canvas.*
+
+| Timestamp | Visual Action | Narration & Voice Commands | Technical Highlight |
+| :--- | :--- | :--- | :--- |
+| **0:30 – 0:55** | **Landing & Spatial Exploration:**<br>Full view of Aurelia Sanctuary. 300-frame photographic canvas scrubs seamlessly. Natural voice activates ORA. | **Speaker:** *"Aurelia Sanctuary — a place to stay, a place to feel."* Speaks to Ora to show the estate. | Hardware-accelerated photographic canvas, live WebAudio soundscape, hands-free continuous voice session. |
+| **0:55 – 1:25** | **Environmental Ambiance Control:**<br>Voice command triggers lighting change. Estate transitions smoothly from daylight to evening sunset and night. | **Speaker:** *"Show me the property in the evening."*<br>*(Lighting warms, ambiance shift executes)* | Sub-millisecond intent extraction (<1ms router), synchronized lighting swap (`day` &rarr; `sunset` &rarr; `night`), WebAudio ducking. |
+| **1:25 – 1:55** | **Architectural Detail Navigation:**<br>Navigates directly into interior spaces without menus. | **Speaker:** Commands Ora to view the **Master Bedroom Suite** and **Primary Ensuite Spa**.<br>*(Detail placards center smoothly with architectural signatures)* | Detail space routing (`SHOW_SPACE(master_bedroom)`), resolution of spatial contracts without page reloads. |
+| **1:55 – 2:30** | **Verified Reservation Request:**<br>Guest initiates complete shortlet stay buyout entirely through voice. | **Speaker:** *"Reserve Aurelia for Mr. John from October 5th to October 7th."*<br>*(Glassmorphic **Reservation Pass** animates into view with itemized pricing)* | Real entity extraction (guest name + calendar dates), deterministic math (2 nights × $1,850 = $3,700 USD), unique `AUR-2026-6334` reference. |
+| **2:30 – 2:47** | **Mobile WhatsApp Concierge Handoff:**<br>Inspects the verified pass and initiates mobile concierge handoff. | **Speaker:** Inspects the reservation card and highlights **"Continue on WhatsApp"**.<br>*(Clicks CTA &rarr; prefilled mobile concierge handoff triggers)* | Client-side URL-encoded `wa.me` deep link, state machine transitions to `HANDOFF_OPENED`, frictionless handoff. |
+
+---
+
+## Technical Summary of Master Video Asset
+- **Master Video File:** `/home/oyeolorun/ora-concept-film/out/ora_complete_hackathon_demo.mp4`
+- **Total Runtime:** 166.90s (2m 46.9s)
+- **Resolution:** 1920 × 1080 (Full HD, 30 fps, Progressive)
+- **Audio Processing:** Dual-track mastered — Adam (ElevenLabs) studio narration in Part 1 + FFT-denoised, EQ-balanced, and -16 LUFS loudness-normalized human voice in Part 2.
+- **Verification:** 100% aligned with live application codebase and 261 passing automated tests.
