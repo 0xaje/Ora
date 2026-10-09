@@ -98,23 +98,21 @@ The project adhered strictly to the Devpost Learn Skill Pack (`challengepost/lea
 - **Audio & Media:** WebAudio API (`AureliaAtmosphere`), Web Speech Synthesis
 - **Voice STT:** AssemblyAI Universal Streaming STT v3 WebSocket
 - **Intelligence:** Sub-millisecond Fast-Path Router, Ollama (`llama3.2:1b`), OpenRouter API fallback
-- **Verification:** Node.js native test runner + `tsx` (261 automated tests)
+- **Verification:** Node.js native test runner + `tsx` (270 automated tests)
 
 ---
 
 ### 11. Current Proof-of-Concept Boundaries & Architecture Choice
-- **Single Estate:** Modeled for the private Aurelia Sanctuary estate ($1,850/night exclusive buyout), not a multi-room hotel PMS.
-- **Reservation Request:** Focuses on verified request generation and direct WhatsApp handoff rather than live credit card processing.
+- **Single Estate Reference Environment:** Modeled for the private Aurelia Sanctuary concept estate ($1,850/night reference buyout rate), demonstrating the `ProductAdapter` boundary.
+- **Reservation Request:** Focuses on verified request generation, deterministic pricing, and WhatsApp handoff rather than live card processing or false booking confirmation.
 - **Session Persistence:** Relies on in-memory and `sessionStorage` state to eliminate external database setup requirements.
-- **Why Local Architecture (Ollama) Over Cloud Deployment (Vercel):** The app is deliberately built to run on local open-source inference (`Ollama` + `llama3.2:1b`). This keeps the system 100% private and eliminates expensive paid LLM cloud API subscriptions ($0 operating cost). A static deployment on Vercel would break connection to the user's local Ollama instance; keeping it on `localhost` ensures true local sovereignty, and the video demo provides full end-to-end proof for judges.
+- **Execution & Privacy Architecture:** Speech audio is sent to AssemblyAI for streaming transcription. When local Ollama (`llama3.2:1b`) is used, conversational LLM inference is run on-device with zero LLM API token charges; OpenRouter can be configured as an external alternative.
+- **Why Local Architecture Over Cloud Hosting:** Running locally preserves direct access to local Ollama inference without requiring external GPU container hosting. In line with Devpost guidelines, reviewer evaluation is based on the video walkthrough and open repository code.
 
 ---
 
-### 12. Demo Video Checklist (<3 Minutes)
-- [ ] Show arriving on the landing page and unmute ambient soundscape.
-- [ ] Speak: *"Show me the living room at sunset"* (demonstrate spatial camera move + ambiance shift).
-- [ ] Speak: *"Show me the pool"* (demonstrate detail placard).
-- [ ] Interrupt Ora mid-sentence to prove voice barge-in.
-- [ ] Speak: *"Reserve Aurelia for John from October 9th to October 11th"*.
-- [ ] Highlight the glassmorphic **Reservation Pass** ($3,700 total, 2 nights).
-- [ ] Click **"Continue on WhatsApp"** and show the prefilled WhatsApp tab opening.
+### 12. Concise Submission Checklist
+- [ ] **Public GitHub Repository:** Ensure `https://github.com/0xaje/Ora` is public and accessible, containing the full codebase and documentation.
+- [ ] **Demonstration Video:** Video walkthrough under 3 minutes uploaded and linked on the Devpost submission page.
+- [ ] **Skill Pack Usage Answer:** Complete the required Devpost question detailing the Build With AI Basics planning docs (`scope.md`, `prd.md`, `spec.md`, `checklist.md`) and actual development workflow.
+- [ ] **Age & Eligibility Checkbox:** Review and check the mandatory entrant age and eligibility confirmation boxes on the Devpost submission form.

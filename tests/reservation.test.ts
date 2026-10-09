@@ -52,6 +52,36 @@ describe("Phase 3: Reservation Business Logic & Calculations", () => {
     assert.throws(() => calculateNights("2026-10-09", "tomorrow"), /Invalid check-out date format/);
   });
 
+  test("calculateNights rejects impossible calendar dates without normalization", () => {
+    // Impossible February 30th
+    assert.throws(
+      () => calculateNights("2026-02-30", "2026-03-05"),
+      /Invalid calendar check-in date: "2026-02-30"/
+    );
+
+    // Impossible April 31st
+    assert.throws(
+      () => calculateNights("2026-04-31", "2026-05-05"),
+      /Invalid calendar check-in date: "2026-04-31"/
+    );
+
+    // Non-leap year February 29th (2026 is not a leap year)
+    assert.throws(
+      () => calculateNights("2026-02-29", "2026-03-02"),
+      /Invalid calendar check-in date: "2026-02-29"/
+    );
+
+    // Leap year February 29th is VALID (2028 is a leap year)
+    assert.equal(calculateNights("2028-02-28", "2028-03-01"), 2);
+    assert.equal(calculateNights("2028-02-29", "2028-03-01"), 1);
+
+    // Month 00 or 13, Day 00
+    assert.throws(() => calculateNights("2026-00-10", "2026-01-15"), /Invalid calendar check-in date/);
+    assert.throws(() => calculateNights("2026-13-10", "2027-01-15"), /Invalid calendar check-in date/);
+    assert.throws(() => calculateNights("2026-10-00", "2026-10-05"), /Invalid calendar check-in date/);
+    assert.throws(() => calculateNights("2026-10-05", "2026-10-32"), /Invalid calendar check-out date/);
+  });
+
   test("pricing is deterministically calculated by the application (nightlyRate * nights)", () => {
     const rate = AURELIA_RESERVATION_CONFIG.nightlyRate;
     assert.equal(rate, 1850);
@@ -382,6 +412,70 @@ describe("Phase 3: Fast-Path & Conversational End-to-End Flow", () => {
       assert.ok(t3.decision.checkIn?.endsWith("-10-09"));
       assert.ok(t3.decision.checkOut?.endsWith("-10-12"));
     }
+  });
+
+  test("Complete Multi-Turn Sequence: reserve -> name -> check in -> check out with deterministic pricing & checkout correction", async () => {
+    const session = { history: [], recentTurns: [] };
+
+    // Turn 1: "I'd like to reserve Aurelia."
+    const t1 = await executeOraRequest("I'd like to reserve Aurelia.", provider, context, session);
+    assert.equal(t1.decision?.type, "CLARIFICATION");
+
+    // Turn 2: "My name is John."
+    const t2 = await executeOraRequest("My name is John.", provider, context, session);
+    assert.equal(t2.decision?.type, "CLARIFICATION");
+    assert.ok(t2.spokenResponse.includes("John"));
+
+    // Turn 3: "Check in October 20, 2026."
+    const t3 = await executeOraRequest("Check in October 20, 2026.", provider, context, session);
+    assert.equal(t3.decision?.type, "CLARIFICATION");
+
+    // Turn 4: "Check out October 22, 2026." -> complete 2 nights at $1,850 = $3,700
+    const t4 = await executeOraRequest("Check out October 22, 2026.", provider, context, session);
+    assert.equal(t4.decision?.type, "INITIATE_TRANSACTION");
+    if (t4.decision?.type === "INITIATE_TRANSACTION") {
+      assert.equal(t4.decision.guestName, "John");
+      assert.equal(t4.decision.checkIn, "2026-10-20");
+      assert.equal(t4.decision.checkOut, "2026-10-22");
+    }
+
+    // Turn 5: Correction - "Check out October 23, 2026." -> updates checkOut to 23rd
+    const t5 = await executeOraRequest("Check out October 23, 2026.", provider, context, session);
+    assert.equal(t5.decision?.type, "INITIATE_TRANSACTION");
+    if (t5.decision?.type === "INITIATE_TRANSACTION") {
+      assert.equal(t5.decision.guestName, "John");
+      assert.equal(t5.decision.checkIn, "2026-10-20");
+      assert.equal(t5.decision.checkOut, "2026-10-23");
+    }
+  });
+
+  test("Cancellation boundary: fresh request does not inherit details from canceled booking", async () => {
+    const session = { history: [], recentTurns: [] };
+
+    // Turn 1: User reserves under John
+    await executeOraRequest("Reserve Aurelia for John from October 20 to 22, 2026", provider, context, session);
+
+    // Turn 2: Cancel
+    const cancelTurn = await executeOraRequest("cancel", provider, context, session);
+    assert.equal(cancelTurn.decision?.type, "PROPERTY_ANSWER");
+
+    // Turn 3: Fresh inquiry from Sarah
+    const fresh = await executeOraRequest("I want to reserve Aurelia", provider, context, session);
+    assert.equal(fresh.decision?.type, "CLARIFICATION");
+    // Should NOT have preserved "John" or "2026-10-20"
+    if (fresh.decision?.type === "CLARIFICATION") {
+      assert.doesNotMatch(fresh.spokenResponse, /John/);
+    }
+  });
+
+  test("Invalid calendar date in multi-turn prompts clarification rather than silent distortion", async () => {
+    const session = { history: [], recentTurns: [] };
+    await executeOraRequest("Reserve Aurelia for Alice", provider, context, session);
+
+    // Feb 30 does not exist
+    const invalidTurn = await executeOraRequest("from 2026-02-30 to 2026-03-05", provider, context, session);
+    assert.equal(invalidTurn.decision?.type, "CLARIFICATION");
+    assert.ok(invalidTurn.spokenResponse.includes("Invalid calendar check-in date"));
   });
 
   test("Day-first natural date range with speech filler: 'My name is John, from 5th to like 8th of October 2026'", async () => {

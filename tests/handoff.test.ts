@@ -127,15 +127,30 @@ describe("Phase 4: WhatsApp Reservation Handoff Unit Tests", () => {
       assert.match(decoded, /Estimated total:\s*\$9,250 USD/);
     });
 
-    it("does not hardcode any user or operator phone number", () => {
-      const urlA = buildWhatsAppHandoffUrl(sampleReservationA);
-      const urlB = buildWhatsAppHandoffUrl(sampleReservationB);
+    it("generates recipient-addressed URL when host WhatsApp number is configured", () => {
+      const configuredHost = "14155552671";
+      const url = buildWhatsAppHandoffUrl(sampleReservationA, configuredHost);
+      assert.ok(url.startsWith("https://wa.me/14155552671?text="));
+      const messagePart = url.replace("https://wa.me/14155552671?text=", "");
+      assert.ok(messagePart.includes(encodeURIComponent("AUR-2026-4821")));
+    });
 
-      // Must be https://wa.me/?text=, NOT https://wa.me/1234567890?text=
-      assert.ok(urlA.startsWith("https://wa.me/?text="));
-      assert.ok(urlB.startsWith("https://wa.me/?text="));
-      assert.doesNotMatch(urlA, /^https:\/\/wa\.me\/\d+/);
-      assert.doesNotMatch(urlB, /^https:\/\/wa\.me\/\d+/);
+    it("generates recipient-selection URL when host number is unconfigured or undefined", () => {
+      const url = buildWhatsAppHandoffUrl(sampleReservationA, undefined);
+      assert.ok(url.startsWith("https://wa.me/?text="));
+      assert.doesNotMatch(url, /^https:\/\/wa\.me\/\d+\?text=/);
+    });
+
+    it("sanitizes host numbers with formatting characters or spaces", () => {
+      const formattedHost = "+1 (415) 555-2671";
+      const url = buildWhatsAppHandoffUrl(sampleReservationA, formattedHost);
+      assert.ok(url.startsWith("https://wa.me/14155552671?text="));
+    });
+
+    it("falls back to recipient selection if host number is invalid", () => {
+      const invalidHost = "123"; // Too short for valid E.164 phone
+      const url = buildWhatsAppHandoffUrl(sampleReservationA, invalidHost);
+      assert.ok(url.startsWith("https://wa.me/?text="));
     });
   });
 
@@ -300,6 +315,20 @@ describe("Phase 4: WhatsApp Reservation Handoff Unit Tests", () => {
       } finally {
         (globalThis as any).window = originalWindow;
       }
+    });
+
+    it("distinguishes incomplete DRAFT from READY_FOR_HANDOFF and forbids incomplete drafts from host confirmation readiness", () => {
+      const draft = reservationStore.create({
+        guestName: "Unfinished Guest",
+        source: "ORA"
+      });
+
+      assert.equal(draft.status, "DRAFT");
+      assert.equal(draft.nights, 0);
+      assert.equal(draft.total, 0);
+
+      // Draft must NOT be marked ready for handoff
+      assert.notEqual(draft.status, "READY_FOR_HANDOFF");
     });
   });
 });

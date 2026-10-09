@@ -8,11 +8,52 @@
 
 import { AURELIA_RESERVATION_CONFIG } from "./reservationConfig";
 
-const ISO_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+const ISO_DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+/**
+ * Checks whether a given year is a leap year according to Gregorian calendar rules.
+ */
+export function isLeapYear(year: number): boolean {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
+
+/**
+ * Returns the maximum days in a given month of a given year (1-indexed month: 1..12).
+ */
+export function getDaysInMonth(year: number, month: number): number {
+  if (month < 1 || month > 12) return 0;
+  if (month === 2) {
+    return isLeapYear(year) ? 29 : 28;
+  }
+  if ([4, 6, 9, 11].includes(month)) {
+    return 30;
+  }
+  return 31;
+}
+
+/**
+ * Validates whether a date string strictly represents an authentic, valid calendar date.
+ * Rejects month 00/13, day 00, impossible days (e.g. Feb 30, April 31), invalid leap days (e.g. Feb 29 in non-leap year).
+ */
+export function isValidCalendarDate(dateStr: string): boolean {
+  if (!dateStr || typeof dateStr !== "string") return false;
+  const match = dateStr.match(ISO_DATE_REGEX);
+  if (!match) return false;
+
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10);
+  const day = parseInt(match[3], 10);
+
+  if (month < 1 || month > 12) return false;
+  const maxDays = getDaysInMonth(year, month);
+  if (day < 1 || day > maxDays) return false;
+
+  return true;
+}
 
 /**
  * Validates check-in and check-out dates and calculates the stay duration in nights.
- * Enforces checkOut > checkIn and nights > 0.
+ * Strictly verifies calendar validity for both dates and enforces checkOut > checkIn and nights > 0.
  */
 export function calculateNights(checkIn: string, checkOut: string): number {
   if (!ISO_DATE_REGEX.test(checkIn)) {
@@ -20,6 +61,13 @@ export function calculateNights(checkIn: string, checkOut: string): number {
   }
   if (!ISO_DATE_REGEX.test(checkOut)) {
     throw new Error(`Invalid check-out date format: "${checkOut}". Expected YYYY-MM-DD.`);
+  }
+
+  if (!isValidCalendarDate(checkIn)) {
+    throw new Error(`Invalid calendar check-in date: "${checkIn}". Date does not exist on the calendar.`);
+  }
+  if (!isValidCalendarDate(checkOut)) {
+    throw new Error(`Invalid calendar check-out date: "${checkOut}". Date does not exist on the calendar.`);
   }
 
   const [inYear, inMonth, inDay] = checkIn.split("-").map(Number);

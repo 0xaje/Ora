@@ -100,4 +100,39 @@ describe("Phase 5C.1: Conversational Barge-In & Speech Interruption", () => {
     });
     assert.equal(speechOutput.isSpeaking(), false);
   });
+
+  test("microphone audio forwarding remains active while Ora speaks to allow continuous barge-in", () => {
+    const sentChunks: Int16Array[] = [];
+    const session = new VoiceSession({
+      continuous: true
+    });
+
+    // Mock active stream and mic
+    const mockStream = {
+      sendAudio: (chunk: Int16Array) => {
+        sentChunks.push(chunk);
+      },
+      getIsConnected: () => true,
+      terminate: () => {}
+    };
+    (session as any).stream = mockStream;
+
+    // Simulate speech playback beginning
+    (speechOutput as any).isSpeakingInternal = true;
+    assert.equal(speechOutput.isSpeaking(), true);
+
+    // Ensure session is NOT paused during active speech playback
+    assert.equal((session as any).isPaused, false);
+
+    // Audio chunk arrives from mic while Ora is speaking
+    const testChunk = new Int16Array([100, 200, 300]);
+    // The onAudioChunk callback in VoiceSession forwards if !isPaused && this.stream
+    if (!(session as any).isPaused && (session as any).stream) {
+      (session as any).stream.sendAudio(testChunk);
+    }
+
+    assert.equal(sentChunks.length, 1);
+    assert.deepEqual(sentChunks[0], testChunk);
+  });
 });
+

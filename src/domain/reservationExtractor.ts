@@ -389,19 +389,33 @@ export function extractStayDates(
   }
 
   // 8. Single check-in or single check-out specification
-  const singleCheckIn = text.match(/check(?:ing)?\s*in\s+(?:on\s+)?(?:from\\s+)?(?:(${MONTH_PATTERN})\s+(\\d{1,2}(?:st|nd|rd|th)?)|(?:the\\s+)?(\\d{1,2}(?:st|nd|rd|th)?)\\s+(?:of\\s+)?(${MONTH_PATTERN}))/i);
-  const singleCheckOut = text.match(/check(?:ing)?\s*out\s+(?:on\\s+)?(?:(${MONTH_PATTERN})\s+(\\d{1,2}(?:st|nd|rd|th)?)|(?:the\\s+)?(\\d{1,2}(?:st|nd|rd|th)?)\\s+(?:of\\s+)?(${MONTH_PATTERN}))/i);
+  // e.g. "check in October 20", "check in October 20, 2026", "check in on Oct 20th", "check out October 22, 2026", "check out 22nd of October"
+  const singleCheckInRegex = new RegExp(
+    `check(?:ing)?\\s*in\\s+(?:on\\s+)?(?:from\\s+)?(?:(${MONTH_PATTERN})\\s+(\\d{1,2}(?:st|nd|rd|th)?)(?:\\s*,?\\s*(20\\d{2}))?|(?:the\\s+)?(\\d{1,2}(?:st|nd|rd|th)?)\\s+(?:of\\s+)?(${MONTH_PATTERN})(?:\\s*,?\\s*(20\\d{2}))?)`,
+    "i"
+  );
+  const singleCheckOutRegex = new RegExp(
+    `check(?:ing)?\\s*out\\s+(?:on\\s+)?(?:(${MONTH_PATTERN})\\s+(\\d{1,2}(?:st|nd|rd|th)?)(?:\\s*,?\\s*(20\\d{2}))?|(?:the\\s+)?(\\d{1,2}(?:st|nd|rd|th)?)\\s+(?:of\\s+)?(${MONTH_PATTERN})(?:\\s*,?\\s*(20\\d{2}))?)`,
+    "i"
+  );
+
+  const singleCheckIn = text.match(singleCheckInRegex);
+  const singleCheckOut = text.match(singleCheckOutRegex);
 
   const res: { checkIn?: string; checkOut?: string } = {};
   if (singleCheckIn) {
-    const m = singleCheckIn[1] ? MONTH_NAMES[singleCheckIn[1].toLowerCase()] : MONTH_NAMES[singleCheckIn[4].toLowerCase()];
-    const d = singleCheckIn[2] ? normalizeDay(singleCheckIn[2]) : normalizeDay(singleCheckIn[3]);
-    res.checkIn = `${year}-${m}-${d}`;
+    const m = singleCheckIn[1] ? MONTH_NAMES[singleCheckIn[1].toLowerCase()] : MONTH_NAMES[singleCheckIn[5].toLowerCase()];
+    const d = singleCheckIn[2] ? normalizeDay(singleCheckIn[2]) : normalizeDay(singleCheckIn[4]);
+    const explicitY = singleCheckIn[3] || singleCheckIn[6];
+    const targetY = explicitY ? parseInt(explicitY, 10) : year;
+    res.checkIn = `${targetY}-${m}-${d}`;
   }
   if (singleCheckOut) {
-    const m = singleCheckOut[1] ? MONTH_NAMES[singleCheckOut[1].toLowerCase()] : MONTH_NAMES[singleCheckOut[4].toLowerCase()];
-    const d = singleCheckOut[2] ? normalizeDay(singleCheckOut[2]) : normalizeDay(singleCheckOut[3]);
-    res.checkOut = `${year}-${m}-${d}`;
+    const m = singleCheckOut[1] ? MONTH_NAMES[singleCheckOut[1].toLowerCase()] : MONTH_NAMES[singleCheckOut[5].toLowerCase()];
+    const d = singleCheckOut[2] ? normalizeDay(singleCheckOut[2]) : normalizeDay(singleCheckOut[4]);
+    const explicitY = singleCheckOut[3] || singleCheckOut[6];
+    const targetY = explicitY ? parseInt(explicitY, 10) : year;
+    res.checkOut = `${targetY}-${m}-${d}`;
   }
   if (res.checkIn || res.checkOut) {
     return res;
@@ -537,32 +551,51 @@ export function extractReservationIntent(
         }
       }
 
-      // Inherit missing fields from earlier turns if user is continuing the reservation flow
+      // Inherit missing fields from earlier turns if user is continuing the reservation flow.
+      // Scan backwards until a cancellation turn or beginning of history.
       if (hasContextualReservationIntent || hasDirectPhrases || providesReservationDetail) {
-        if (!guestName || !checkIn || !checkOut) {
-          for (let i = recent.length - 1; i >= 0; i--) {
-            const turn = recent[i];
-            if (turn.decision && turn.decision.type === "INITIATE_TRANSACTION") {
-              if (!guestName && (turn.decision as any).guestName && (turn.decision as any).guestName !== "Guest") {
-                guestName = (turn.decision as any).guestName;
-              }
-              if (!checkIn && (turn.decision as any).checkIn) {
-                checkIn = (turn.decision as any).checkIn;
-              }
-              if (!checkOut && (turn.decision as any).checkOut) {
-                checkOut = (turn.decision as any).checkOut;
-              }
+        // Find if there was a cancellation turn in the recent history
+        let cancelIdx = -1;
+        for (let i = recent.length - 1; i >= 0; i--) {
+          const t = recent[i];
+          const tNorm = t.text.toLowerCase().replace(/[^a-z0-9_\s-]/g, " ").replace(/\s+/g, " ").trim();
+          if (
+            tNorm === "never mind" ||
+            tNorm === "nevermind" ||
+            tNorm === "cancel" ||
+            tNorm === "cancel reservation" ||
+            tNorm === "cancel booking" ||
+            tNorm === "forget it" ||
+            tNorm === "forget that"
+          ) {
+            cancelIdx = i;
+            break;
+          }
+        }
+
+        // Only inherit turns that occurred AFTER the most recent cancellation
+        for (let i = recent.length - 1; i > cancelIdx; i--) {
+          const turn = recent[i];
+          if (turn.decision && turn.decision.type === "INITIATE_TRANSACTION") {
+            if (!guestName && (turn.decision as any).guestName && (turn.decision as any).guestName !== "Guest") {
+              guestName = (turn.decision as any).guestName;
             }
-            if (turn.role === "user") {
-              if (!guestName) {
-                const prevName = extractGuestName(turn.text);
-                if (prevName) guestName = prevName;
-              }
-              if (!checkIn || !checkOut) {
-                const prevDates = extractStayDates(turn.text, referenceYear);
-                if (!checkIn && prevDates.checkIn) checkIn = prevDates.checkIn;
-                if (!checkOut && prevDates.checkOut) checkOut = prevDates.checkOut;
-              }
+            if (!checkIn && (turn.decision as any).checkIn) {
+              checkIn = (turn.decision as any).checkIn;
+            }
+            if (!checkOut && (turn.decision as any).checkOut) {
+              checkOut = (turn.decision as any).checkOut;
+            }
+          }
+          if (turn.role === "user") {
+            if (!guestName) {
+              const prevName = extractGuestName(turn.text);
+              if (prevName) guestName = prevName;
+            }
+            if (!checkIn || !checkOut) {
+              const prevDates = extractStayDates(turn.text, referenceYear);
+              if (!checkIn && prevDates.checkIn) checkIn = prevDates.checkIn;
+              if (!checkOut && prevDates.checkOut) checkOut = prevDates.checkOut;
             }
           }
         }
@@ -570,7 +603,13 @@ export function extractReservationIntent(
     }
 
     // Also inherit from latest active reservation in session store if user asks for bill or details are missing
-    if (hasBillingPhrases || hasDirectPhrases || hasContextualReservationIntent) {
+    // Note: Do not inherit from store if there was a recent cancellation
+    const hadRecentCancel = session?.recentTurns?.some((t) => {
+      const tn = t.text.toLowerCase().trim();
+      return tn === "never mind" || tn === "cancel" || tn === "cancel reservation";
+    });
+
+    if (!hadRecentCancel && (hasBillingPhrases || hasDirectPhrases || hasContextualReservationIntent)) {
       if (!guestName || !checkIn || !checkOut) {
         try {
           const latestReq = reservationStore.getLatest();

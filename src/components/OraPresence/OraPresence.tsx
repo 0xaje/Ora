@@ -237,9 +237,7 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
     isListening,
     partialTranscript,
     startListening,
-    stopListening,
-    pauseStreaming,
-    resumeListening
+    stopListening
   } = useVoiceSession({
     continuous: true,
     onStateChange: (state) => {
@@ -341,12 +339,12 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
         const isClarification = result.interpretation.type === "CLARIFICATION_REQUIRED";
         setOraState(isClarification ? "clarification" : "responding");
 
-        // 4. Vocalize response with speech synthesis (cancellable by user interaction)
-        pauseStreaming();
+        // 4. Vocalize response with speech synthesis (cancellable by user interaction / barge-in)
+        // Keep microphone streaming active so user speech reliably triggers barge-in interruption!
         try {
           await speechOutput.speak(result.spokenResponse);
-        } finally {
-          resumeListening();
+        } catch {
+          // speech canceled or interrupted
         }
 
         // 5. Seamlessly return to listening if not barged into
@@ -364,7 +362,7 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
         throw err;
       }
     },
-    [context, onSpatialAction, provider, isOpen, startGrandTour, stopTour, pauseStreaming, resumeListening]
+    [context, onSpatialAction, provider, isOpen, startGrandTour, stopTour]
   );
 
   /**
@@ -379,9 +377,8 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
       showWhisper(WELCOME_GREETING, 8000);
     }
 
-    // 2. Vocalize welcome greeting out loud
+    // 2. Vocalize welcome greeting out loud (cancellable by barge-in)
     if (!hasSpokenWelcomeRef.current) {
-      pauseStreaming();
       speechOutput
         .speak(WELCOME_GREETING)
         .then((spoken) => {
@@ -389,10 +386,7 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
             hasSpokenWelcomeRef.current = true;
           }
         })
-        .catch(() => {})
-        .finally(() => {
-          resumeListening();
-        });
+        .catch(() => {});
     }
 
     // 3. Activate continuous microphone hands-free
@@ -406,7 +400,7 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
         setOraState("idle");
       }
     }
-  }, [showWhisper, startListening, isListening, pauseStreaming, resumeListening]);
+  }, [showWhisper, startListening, isListening]);
 
   // Auto-welcome and auto-listen on mount
   useEffect(() => {

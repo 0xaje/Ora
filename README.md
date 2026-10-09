@@ -4,7 +4,7 @@
 > A reusable conversational intelligence and spatial action layer for high-value visual digital products.  
 > *Demonstrated via the **AURELIA Sanctuary** luxury architectural shortlet reference implementation.*
 
-[![Test Suite](https://img.shields.io/badge/tests-261%20passing-brightgreen)](tests/)
+[![Test Suite](https://img.shields.io/badge/tests-270%20passing-brightgreen)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Devpost](https://img.shields.io/badge/Devpost-Build%20With%20AI%3A%20Basics-blueviolet)](https://learn-ai-basics.devpost.com/)
 [![Repository](https://img.shields.io/badge/GitHub-0xaje%2FOra-black)](https://github.com/0xaje/Ora)
@@ -28,28 +28,28 @@ When a user speaks, ORA directly controls the digital canvas:
 
 ---
 
-## Flagship Showcase: AURELIA Sanctuary
+## Flagship Showcase: AURELIA Sanctuary Reference Environment
 
-To prove ORA in a demanding real-world domain, this repository includes **AURELIA Sanctuary** as its flagship reference implementation.
+To prove ORA in a demanding visual domain, this repository includes **AURELIA Sanctuary** as its flagship concept reference implementation.
 
-AURELIA is a private modernist desert shortlet residence. Rather than clicking through static photo galleries and room forms, guests explore the estate through spoken conversation with ORA:
+AURELIA is a concept modernist desert shortlet residence. Rather than clicking through static photo galleries and room forms, visitors explore the estate through spoken conversation with ORA:
 - *"Show me the living room at sunset."* &rarr; The 300-frame canvas smoothly glides to the living room, lighting warms to evening dusk, and background music ducks.
 - *"Show me the master suite."* &rarr; Architectural detail placards center into view.
-- *"Give me a tour."* &rarr; ORA leads an autonomous 8-stop guided tour with instant voice barge-in.
-- *"Reserve Aurelia for John from October 9th to October 11th."* &rarr; ORA verifies stay dates, calculates verified pricing ($1,850/night), and generates a glassmorphic **Reservation Pass** with one-click **WhatsApp handoff** to the estate host.
+- *"Give me a tour."* &rarr; ORA leads an autonomous guided tour with instant voice barge-in.
+- *"Reserve Aurelia for John from October 9th to October 11th."* &rarr; ORA verifies stay dates, deterministically calculates stay total based on the demonstration reference rate ($1,850/night), and generates a glassmorphic **Reservation Request Pass** with **WhatsApp handoff** to coordinate with the host.
 
 ---
 
 ## The Experience Loop
 
-$$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{TRANSACT} \longrightarrow \text{HANDOFF}$$
+$$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{REQUEST} \longrightarrow \text{HANDOFF}$$
 
 1. **SPEAK:** Speak naturally via hands-free streaming microphone input.
-2. **UNDERSTAND:** Continuous 16kHz PCM audio streams to AssemblyAI v3 WebSocket; sub-millisecond fast-path router (<1ms) or LLM extracts intent.
+2. **UNDERSTAND:** Continuous 16kHz PCM audio streams to AssemblyAI v3 WebSocket; fast-path router resolves common directives locally in <1ms, while conversational queries leverage the configured LLM provider.
 3. **EXPLORE:** The decoupled `ProductAdapter` navigates the visual canvas: scrubbing frames, switching camera viewpoints, or adjusting lighting.
-4. **DECIDE:** The visitor explores architectural features, takes guided tours, and asks questions with instant voice interruption (barge-in).
-5. **TRANSACT:** Natural language extraction captures customer parameters (guest name, dates, preferences), and authoritative domain logic computes verified pricing.
-6. **HANDOFF:** Generates a structured digital pass (`READY_FOR_HANDOFF`) and transfers directly to mobile messaging channels (WhatsApp, Telegram, or CRM).
+4. **DECIDE:** The visitor explores architectural features, takes guided tours, and asks questions with genuine voice interruption (barge-in).
+5. **REQUEST:** Natural language extraction captures customer parameters (guest name, dates), and authoritative domain logic computes estimated stay totals.
+6. **HANDOFF:** Generates a structured digital pass (`READY_FOR_HANDOFF`) and transfers to WhatsApp with prefilled reference details (`AUR-YYYY-XXXX`).
 
 ---
 
@@ -106,12 +106,12 @@ ORA is designed to plug into **any** high-value visual product via the formal `P
 
 ## Where We Are Today (Current Verified Status)
 
-- **261 Automated Tests Passing** (`npm test`, 0 failures) across 63 test suites.
+- **270 Automated Tests Passing** (`npm test`, 0 failures) across 63 test suites.
 - **Production Build Verified** (`npm run build`) compiling in ~3.2 seconds.
 - **Continuous Voice Streaming:** Real-time microphone worklet with AssemblyAI Universal Streaming v3 and server-side ephemeral token minting.
-- **Instant Voice Barge-In:** Immediate speech cancellation and tour abort when user speaks.
+- **Genuine Voice Barge-In:** Continuous listening during playback with immediate speech cancellation and tour abort when user speaks.
 - **Acoustic Harmony:** WebAudio soundscape with dynamic volume ducking during speech turns.
-- **Verified Commerce Flow:** Spoken reservation extraction, deterministic calculations ($1,850 × nights), authentic `AUR-YYYY-XXXX` reference generator, and WhatsApp browser deep link handoff.
+- **Verified Request Flow:** Multi-turn spoken reservation extraction, deterministic calculations ($1,850 reference rate × nights), unique `AUR-YYYY-XXXX` reference generator, and WhatsApp browser deep link handoff.
 - **Repository Security:** Zero committed secrets; all credentials protected by `.gitignore`.
 
 ---
@@ -200,14 +200,14 @@ npm run dev
 
 ---
 
-## Architecture Decision: Why Local Execution (Ollama) & Deployment Note
+## Architecture Decision: Execution, Privacy & Host Handoff
 
-ORA is intentionally architected to run on `localhost:5173` powered by **local open-source LLM inference via Ollama (`llama3.2:1b`)**:
+ORA is designed to run on `localhost:5173` with flexible intelligence configurations:
 
-1. **Zero-Cost & Accessible ($0 API Subscription):** Traditional web AI demos rely on expensive proprietary LLM API subscriptions (OpenAI, Anthropic). ORA is designed to be accessible to anyone with a computer by using free, local open models.
-2. **Complete Data Privacy:** Guest voice inquiries and conversation turns are processed locally on-device rather than being transmitted to third-party proprietary clouds.
-3. **Localhost vs. Cloud Hosting (Vercel):** Deploying a full local-inference stack to static platforms like Vercel or Netlify would sever the connection to the user's local Ollama instance and require either cloud GPU container hosting or paid API keys. Running locally on `localhost` ensures 100% functionality without subscription gates or infrastructure overhead.
-4. **Devpost Compliance:** In line with Devpost's guidelines (*"Reviewers won't clone or run code, so the video has to show it working — deployment is optional"*), the video walkthrough demonstrates the complete working system end-to-end.
+1. **Inference Choices & Operating Costs:** When running with local Ollama (`llama3.2:1b`), the conversational LLM reasoning phase runs locally with zero LLM API token charges. External transcription (AssemblyAI) or optional external LLM routing (OpenRouter) utilize standard API connections.
+2. **Privacy Boundary:** Microphone audio is streamed to AssemblyAI for speech-to-text transcription. When using local Ollama, the LLM reasoning stays on your local machine; when selecting OpenRouter, prompts are sent to the external provider.
+3. **Truthful Host Handoff:** Opening WhatsApp formats a structured reservation request message with the local request reference (`AUR-YYYY-XXXX`). If a host number is configured, it addresses the message to that number; otherwise, the visitor chooses the recipient on WhatsApp. Opening WhatsApp does not confirm booking or charge payment.
+4. **Localhost vs. Cloud Hosting:** Running locally on `localhost` preserves direct access to local Ollama inference without requiring external server GPU hosting. Devpost guidelines confirm that reviewer evaluation is based on video demonstration and repository code.
 
 ---
 

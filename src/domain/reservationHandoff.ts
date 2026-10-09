@@ -7,7 +7,7 @@
  */
 
 import { ReservationRequest } from "./reservationTypes";
-import { AURELIA_RESERVATION_CONFIG } from "./reservationConfig";
+import { AURELIA_RESERVATION_CONFIG, isValidWhatsAppNumber } from "./reservationConfig";
 
 /**
  * Formats an ISO date string (YYYY-MM-DD) into a clean, human-readable format.
@@ -69,9 +69,24 @@ export function buildReservationHandoffMessage(reservation: ReservationRequest):
 
 /**
  * Builds a valid, URL-encoded WhatsApp browser deep link.
- * Format: https://wa.me/?text=<encoded-message>
+ * 
+ * If a valid host WhatsApp number is provided or configured:
+ *   Format: https://wa.me/<digits>?text=<encoded-message>
+ * If no host number is configured:
+ *   Format: https://wa.me/?text=<encoded-message> (visitor chooses recipient on WhatsApp)
  */
-export function buildWhatsAppHandoffUrl(reservation: ReservationRequest): string {
+export function buildWhatsAppHandoffUrl(
+  reservation: ReservationRequest,
+  hostNumber: string | undefined = AURELIA_RESERVATION_CONFIG.hostWhatsAppNumber
+): string {
   const message = buildReservationHandoffMessage(reservation);
-  return `https://wa.me/?text=${encodeURIComponent(message)}`;
+  const encoded = encodeURIComponent(message);
+
+  if (hostNumber && isValidWhatsAppNumber(hostNumber)) {
+    const cleanDigits = hostNumber.replace(/[^0-9]/g, "");
+    return `https://wa.me/${cleanDigits}?text=${encoded}`;
+  }
+
+  return `https://wa.me/?text=${encoded}`;
 }
+
