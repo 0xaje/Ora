@@ -61,14 +61,14 @@ ORA is an embodied voice and spatial intelligence layer that makes visual digita
 
 ## 5. Core Customer Journey
 
-$$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{RESERVE} \longrightarrow \text{HANDOFF}$$
+$$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{REQUEST} \longrightarrow \text{HANDOFF}$$
 
 1. **SPEAK:** The guest speaks naturally into the continuous microphone stream.
 2. **UNDERSTAND:** ORA captures 16kHz PCM audio, streams to AssemblyAI v3, and extracts multi-turn spatial and business parameters.
 3. **EXPLORE:** The Product Adapter navigates the viewport: the 300-frame canvas smoothly scrubs to the target space, detail cards center, and lighting crossfades.
-4. **DECIDE:** The guest inspects features, takes an autonomous guided Grand Tour, and verifies details through spoken dialogue.
-5. **RESERVE (Phase 3 Completed):** The guest states *"Ora, I’d like to reserve AURELIA for John from October 9th to October 11th"*. ORA validates dates, calculates 2 nights, computes $3,700 total, generates a verified reference (`AUR-YYYY-XXXX`), and presents the digital Reservation Pass in `READY_FOR_HANDOFF` status.
-6. **HANDOFF (Phase 4 Completed):** The guest clicks **"Continue on WhatsApp"**, opening a genuine prefilled `https://wa.me/?text=...` URI delivering the reservation request to mobile messaging, transitioning the status to `HANDOFF_OPENED`.
+4. **DECIDE:** The guest inspects features, takes an autonomous guided Grand Tour, and verifies details through spoken dialogue with voice barge-in.
+5. **REQUEST:** The guest states *"Ora, I’d like to reserve AURELIA for John from October 9th to October 11th"*. ORA validates dates, calculates 2 nights, computes $3,700 estimated total based on the demonstration reference rate, generates a unique request reference (`AUR-YYYY-XXXX`), and presents the digital Reservation Request Pass in `READY_FOR_HANDOFF` status.
+6. **HANDOFF:** The guest clicks **"Share Request on WhatsApp"** (or configured host contact), opening a prefilled `https://wa.me/?text=...` URI delivering the reservation request to WhatsApp, transitioning the status to `HANDOFF_OPENED`.
 
 ---
 
@@ -80,16 +80,16 @@ $$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} 
 | **FR-02** | **8 Architectural Spaces:** Catalog modeling `exterior`, `entrance`, `living_room`, `kitchen`, `hallway`, `master_bedroom`, `ensuite_bathroom`, `infinity_pool`. | AURELIA Domain | **VERIFIED WORKING** |
 | **FR-03** | **Continuous Voice Streaming:** Real-time 16kHz PCM audio streaming via AssemblyAI Universal Streaming v3 WebSocket. | ORA Core | **VERIFIED WORKING** |
 | **FR-04** | **Speech Synthesis (TTS):** Serene concierge voice synthesis with calm British cadence via Web Speech API. | ORA Core | **VERIFIED WORKING** |
-| **FR-05** | **Instant Barge-In:** Immediate speech and tour cancellation when the guest begins speaking. | ORA Core | **VERIFIED WORKING** |
+| **FR-05** | **Genuine Voice Barge-In:** Immediate speech and tour cancellation when the guest begins speaking during playback. | ORA Core | **VERIFIED WORKING** |
 | **FR-06** | **Acoustic Ducking:** WebAudio coordinator automatically quieting background soundscape during voice turns. | ORA Core / Aurelia | **VERIFIED WORKING** |
 | **FR-07** | **Sub-Millisecond Fast-Path Router:** Instant regex/keyword routing (<1ms) for common spatial commands. | ORA Core | **VERIFIED WORKING** |
 | **FR-08** | **Dual LLM Conversational Engine:** Multi-turn intent reasoning supporting local Ollama and OpenRouter. | ORA Core | **VERIFIED WORKING** |
 | **FR-09** | **Autonomous Grand Tour:** Sequenced 8-space guided tour with voice narration at ~2.4s intervals. | ORA Core / Aurelia | **VERIFIED WORKING** |
 | **FR-10** | **Product Adapter Boundary:** Formal TypeScript contract decoupling ORA from Aurelia-specific space names. | Architecture | **VERIFIED WORKING (PHASE 2)** |
-| **FR-11** | **Reservation Request Action:** Parsing stay duration and guest name to calculate total pricing ($1,850/night). | ORA Commerce | **VERIFIED WORKING (PHASE 3)** |
+| **FR-11** | **Reservation Request Action:** Parsing stay duration and guest name to calculate total pricing from reference rate ($1,850/night). | ORA Commerce | **VERIFIED WORKING (PHASE 3)** |
 | **FR-12** | **Session Reservation Store:** Storing verified reservation records with `AUR-YYYY-XXXX` IDs in session memory & `sessionStorage`. | AURELIA Domain | **VERIFIED WORKING (PHASE 3)** |
 | **FR-13** | **Visual Reservation Pass:** Glassmorphic modal displaying verified reservation credential in `READY_FOR_HANDOFF` status. | AURELIA UI | **VERIFIED WORKING (PHASE 3)** |
-| **FR-14** | **WhatsApp Browser Handoff:** Verified `https://wa.me/?text=...` deep link prefilled with itemized reservation request via "Continue on WhatsApp". | ORA Commerce | **VERIFIED WORKING (PHASE 4)** |
+| **FR-14** | **WhatsApp Browser Handoff:** WhatsApp deep link prefilled with itemized reservation request supporting optional host numbers and recipient selection fallback. | ORA Commerce | **VERIFIED WORKING (PHASE 4)** |
 
 ---
 
@@ -97,14 +97,14 @@ $$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} 
 
 ```text
 DRAFT
-  ↓ (Guest name + valid checkIn + checkOut provided)
+  ↓ (Guest name + valid calendar checkIn + checkOut provided)
 READY_FOR_HANDOFF
-  ↓ (Guest activates "Continue on WhatsApp" CTA)
+  ↓ (Guest activates WhatsApp handoff action)
 HANDOFF_OPENED
 ```
 
-* **`DRAFT`:** The user expressed reservation intent, but one or more required fields (guest name, check-in, check-out) are missing. ORA naturally asks for the missing information.
-* **`READY_FOR_HANDOFF`:** Application has verified checkOut > checkIn, calculated nights, computed total ($1,850 × nights), assigned an authentic `AUR-YYYY-XXXX` reference, and displayed the Reservation Pass with the primary "Continue on WhatsApp" CTA.
+* **`DRAFT`:** The user expressed reservation intent, but one or more required fields (guest name, check-in, check-out) are missing. Incomplete drafts cannot be submitted for handoff.
+* **`READY_FOR_HANDOFF`:** Application has verified checkOut > checkIn, calculated nights, computed estimated total ($1,850 reference rate × nights), assigned an authentic `AUR-YYYY-XXXX` reference, and displayed the Reservation Request Pass with the handoff CTA.
 * **`HANDOFF_OPENED`:** The user has clicked to open the external handoff channel.
 
 ---
@@ -112,6 +112,6 @@ HANDOFF_OPENED
 ## 8. AI Guardrails & Truthfulness Constraints
 
 1. **NEVER Claim a Reservation is Confirmed:** ORA explicitly states *"I’ve prepared your reservation request for Aurelia"*, never *"Your booking is confirmed"* or *"Payment received"*.
-2. **NEVER Invent Pricing:** All calculations follow `total = nightlyRate ($1,850) × nights`.
+2. **NEVER Invent Pricing:** All calculations follow `total = referenceNightlyRate ($1,850) × nights`. Inquiry rates are acknowledged upon inquiry without hallucination.
 3. **NEVER Guess Dates from Vague Phrases:** Queries such as *"Book it for next weekend"* produce a request for explicit calendar dates rather than silently inventing dates.
-4. **NEVER Claim Automated WhatsApp Delivery:** The handoff is strictly an authentic browser link (`wa.me`) opened by the user.
+4. **NEVER Claim Automated WhatsApp Delivery:** The handoff is strictly an authentic browser link (`wa.me`) opened by the user, not guaranteed delivery or automated backend push.

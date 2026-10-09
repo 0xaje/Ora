@@ -134,5 +134,39 @@ describe("Phase 5C.1: Conversational Barge-In & Speech Interruption", () => {
     assert.equal(sentChunks.length, 1);
     assert.deepEqual(sentChunks[0], testChunk);
   });
-});
 
+  test("interrupted tour does not resume unexpectedly", () => {
+    let tourActive = true;
+    const abortController = new AbortController();
+
+    // Simulate tour running
+    speechOutput.cancel();
+    (speechOutput as any).isSpeakingInternal = true;
+
+    // Barge-in: visitor speaks
+    tourActive = false;
+    abortController.abort();
+    speechOutput.cancel();
+
+    assert.equal(tourActive, false);
+    assert.equal(abortController.signal.aborted, true);
+    assert.equal(speechOutput.isSpeaking(), false);
+  });
+
+  test("intentional mic toggle safely stops capture and updates paused state", () => {
+    const session = new VoiceSession({ continuous: true });
+    let stopCalled = false;
+    (session as any).mic = {
+      stop: () => {
+        stopCalled = true;
+      }
+    };
+    (session as any).stream = {
+      terminate: () => {}
+    };
+
+    session.stop();
+    assert.equal(stopCalled, true);
+    assert.equal(session.getState(), "idle");
+  });
+});

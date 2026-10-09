@@ -43,25 +43,25 @@ Instead of a floating text chatbot in a corner widget or a blind voice assistant
 * Structured transaction intent extractor (identifying guest name and stay dates).
 
 ### AURELIA (The Reference Implementation)
-* A private modernist desert shortlet residence ("Aurelia Sanctuary") with 8 architectural spaces.
+* A concept modernist desert shortlet residence ("Aurelia Sanctuary") with 8 architectural spaces.
 * 300-frame photographic canvas scrubber with programmatic camera timeline tweening.
 * 3 authentic lighting and ambiance passes (`day`, `sunset`, `night`).
 * Spatial discovery panels for detail sanctuaries (Master Bedroom, Ensuite Spa, Infinity Pool).
-* Authoritative domain pricing model ($1,850/night shortlet buyout rate).
-* Session reservation store and glassmorphic Reservation Pass UI.
+* Configured demonstration reference rate ($1,850/night reference buyout rate; actual property booking upon inquiry).
+* Session reservation store and glassmorphic Reservation Request Pass UI.
 
 ---
 
 ## 4. The Core Customer Journey
 
-$$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{RESERVE} \longrightarrow \text{HANDOFF}$$
+$$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{REQUEST} \longrightarrow \text{HANDOFF}$$
 
 1. **SPEAK:** The guest speaks naturally into the continuous microphone stream.
 2. **UNDERSTAND:** ORA transcribes audio in real time, maintains multi-turn context, and parses spatial/transactional intent.
 3. **EXPLORE:** The Product Adapter directs the viewport: the 300-frame canvas smoothly navigates to the target space, detail cards center into view, or the ambiance crossfades.
-4. **DECIDE:** The guest examines features and asks questions, supported by an autonomous guided Grand Tour and instant barge-in.
-5. **RESERVE (Phase 3 Completed):** The guest states *"Ora, I’d like to reserve AURELIA for John from October 9th to October 11th"*. ORA extracts guest name and dates, calculates 2 nights, computes $3,700 total, generates a verified reference (`AUR-YYYY-XXXX`), and presents the digital Reservation Pass in `READY_FOR_HANDOFF` status.
-6. **HANDOFF (Phase 4 Completed):** The guest clicks **"Continue on WhatsApp"**, opening a genuine prefilled `https://wa.me/?text=...` browser deep link delivering the reservation request to mobile messaging, transitioning the state to `HANDOFF_OPENED`.
+4. **DECIDE:** The guest examines features and asks questions, supported by an autonomous guided Grand Tour and genuine barge-in.
+5. **REQUEST:** The guest states *"Ora, I’d like to reserve AURELIA for John from October 9th to October 11th"*. ORA validates dates, calculates 2 nights, computes $3,700 total from the configured reference rate, generates a unique request reference (`AUR-YYYY-XXXX`), and presents the digital Reservation Request Pass in `READY_FOR_HANDOFF` status.
+6. **HANDOFF:** The guest clicks **"Share Request on WhatsApp"** (or configured host contact), opening a prefilled `https://wa.me/?text=...` browser deep link delivering the reservation request details, transitioning the state to `HANDOFF_OPENED`.
 
 ---
 
@@ -69,17 +69,17 @@ $$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} 
 
 ```text
 DRAFT
-  ↓ (Guest name + valid stay dates provided)
+  ↓ (Guest name + valid calendar stay dates provided)
 READY_FOR_HANDOFF
-  ↓ (User clicks "Continue on WhatsApp")
+  ↓ (User activates WhatsApp handoff action)
 HANDOFF_OPENED
 ```
 
 * **`DRAFT`:** Reservation intent expressed, but required fields (guest name or calendar dates) are pending.
-* **`READY_FOR_HANDOFF`:** Application has validated stay dates, calculated nights and total stay price, generated an authentic `AUR-YYYY-XXXX` reference, and displayed the Reservation Pass with the "Continue on WhatsApp" action.
-* **`HANDOFF_OPENED`:** The user has clicked the external messaging handoff link.
+* **`READY_FOR_HANDOFF`:** Application has validated stay dates, calculated nights and estimated stay total from the reference rate, generated a unique `AUR-YYYY-XXXX` request reference, and displayed the Reservation Request Pass.
+* **`HANDOFF_OPENED`:** The user has triggered the external messaging handoff link.
 
-**Truthful Boundary:** ORA prepares a verified **Reservation Request**. It does not pretend to be a confirmed hotel booking or instant card charge.
+**Truthful Boundary:** ORA prepares a structured **Reservation Request**. It does not confirm availability, charge cards, or finalize bookings. Availability and agreements are settled directly with the host.
 
 ---
 
@@ -90,10 +90,10 @@ HANDOFF_OPENED
 * **300-Frame Canvas Engine:** Hardware-accelerated 2D canvas scrubber with 900 physical JPEG frames across `day`, `sunset`, and `night`.
 * **Acoustic Atmosphere:** Real-time WebAudio soundscape with automated volume ducking during speech turns.
 * **Continuous Hands-Free Voice:** AssemblyAI v3 streaming WebSocket with ephemeral token minting.
-* **Instant Barge-In:** Immediate speech synthesis and tour cancellation when the guest speaks.
+* **Genuine Voice Barge-In:** Continuous audio listening during speech output with immediate speech synthesis and tour cancellation when the guest speaks.
 * **ProductAdapter Boundary:** Formal TypeScript contract decoupling ORA Core from Aurelia's visual and spatial implementation.
-* **Real Shortlet Reservation Flow (Phase 3):** Deterministic date calculation, pricing engine ($1,850/night × nights), dynamic reference generation (`AUR-YYYY-XXXX`), session persistence (`sessionStorage`), and glassmorphic Reservation Pass UI.
-* **WhatsApp Deep Link Handoff (Phase 4):** Verified client-side WhatsApp browser deep link handoff (`https://wa.me/?text=...`) on the Reservation Pass via "Continue on WhatsApp", transitioning status to `HANDOFF_OPENED`.
+* **Shortlet Reservation Request Flow:** Deterministic calendar validation, pricing engine ($1,850/night reference rate × nights), dynamic reference generation (`AUR-YYYY-XXXX`), session persistence (`sessionStorage`), and glassmorphic Reservation Request Pass UI.
+* **WhatsApp Deep Link Handoff:** Client-side WhatsApp browser deep link handoff (`wa.me`) on the Reservation Pass supporting optional configured host numbers and recipient selection fallback, transitioning status to `HANDOFF_OPENED`.
 
 ### Planned Next Implementation:
 * **Phase 5:** Dead code pruning and final submission assets.

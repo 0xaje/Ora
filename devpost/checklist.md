@@ -39,5 +39,12 @@ Build mode: fast (disciplined, verified slices)
 - [x] **PHASE 5 — Final Architecture Cleanup & Repository Readiness**
   - **Becomes usable:** Orphaned prototype files (`VoiceHUD.tsx`, `SpecDock.tsx`, `CinematicStage.tsx`, `hud.css`, `stage.css`) safely removed; client/server boundary cleanly decoupled (no server engine in client bundle); metadata updated to truthful shortlet sanctuary language.
   - **Why now:** Ensures the codebase is pristine, maintainable, defensible, and verified for judging.
-  - **Verify (mechanical):** 252/252 tests pass; production build succeeds in ~1.5s with zero externalized server modules or server engine bundles.
+  - **Verify (mechanical):** 252/252 tests pass; production build succeeds with zero externalized server modules or server engine bundles.
+  - **Status:** Complete.
+
+- [x] **PHASE 6 — Continuous Voice Barge-In & Submission Hardening**
+  - **Becomes usable:** Continuous microphone streaming during spoken agent replies, immediate speech synthesis promise settlement and tour narration cancellation, query sequence counter (`querySeqRef`) discarding stale asynchronous LLM responses upon interruption, single source of truth for demonstration reference rate ($1,850/night), and documented offline live verification script.
+  - **Why now:** Ensures authentic conversational voice flow without synthetic pause suppression or stale response race conditions during demo recording.
+  - **Files:** `src/components/OraPresence/OraPresence.tsx`, `src/voice/voiceSession.ts`, `src/voice/speechOutput.ts`, `src/voice/tourNarration.ts`, `tests/bargeIn.test.ts`, `devpost/checklist.md`.
+  - **Verify (mechanical):** All 272 unit and integration tests pass across 63 test suites; clean production build succeeds in ~2s.
   - **Status:** Complete.

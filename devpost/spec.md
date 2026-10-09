@@ -92,9 +92,9 @@ export interface ReservationRequest {
 ```
 
 ### Deterministic Pricing & Night Calculation (`src/domain/reservationLogic.ts`):
-* Stay duration: `nights = (checkOutTimestamp - checkInTimestamp) / (1000 * 60 * 60 * 24)`
-* Rate configuration: $1,850 USD / night (defined in `src/domain/reservationConfig.ts`).
-* Total calculation: `total = nightlyRate * nights` (e.g. 2 nights × $1,850 = $3,700 USD).
+* Stay duration: strict calendar date validation and nights calculation: `Date.UTC(end) - Date.UTC(start)` in whole nights.
+* Reference rate configuration: $1,850 USD / night demonstration reference rate (defined in `src/domain/reservationConfig.ts`).
+* Estimated total calculation: `total = nightlyRate * nights` (e.g. 2 nights × $1,850 = $3,700 USD). Actual property rates and bookings arranged on inquiry.
 * Reference generation: `AUR-${year}-${random4Digits}` using dynamic current year with active session collision checks.
 
 ### Session Persistence (`src/domain/reservationStore.ts`):
@@ -153,7 +153,7 @@ export type OraAction =
 Visitor Speaks: "Ora, I’d like to reserve AURELIA for John from October 9th to October 11th."
   │
   ▼
-1. Audio Stream & STT: AssemblyAI v3 transcribes audio in real time.
+1. Audio Stream & STT: AssemblyAI v3 transcribes audio in real time. Continuous listening remains active for barge-in.
   │
   ▼
 2. Fast-Path Extractor: extracts guest "John", checkIn "2026-10-09", checkOut "2026-10-11".
@@ -165,22 +165,22 @@ Visitor Speaks: "Ora, I’d like to reserve AURELIA for John from October 9th to
 4. Adapter Execution: AureliaProductAdapter.executeAction(action) calls reservationStore.create(...).
   │
   ▼
-5. Domain Logic: Validates checkOut > checkIn, calculates 2 nights, total = $3,700, generates AUR-YYYY-XXXX.
+5. Domain Logic: Validates calendar dates, calculates 2 nights, total = $3,700, generates AUR-YYYY-XXXX reference.
   │
   ▼
 6. State Updated: Status set to READY_FOR_HANDOFF, saved to sessionStorage, subscribers notified.
   │
   ▼
 7. UI & Vocalization:
-     - ReservationPass modal displays on screen with itemized reservation request details and "Continue on WhatsApp" CTA.
+     - Reservation Request Pass modal displays on screen with itemized details and WhatsApp CTA.
      - Speech synthesis states: "I’ve prepared your reservation request for Aurelia."
   │
   ▼
-8. WhatsApp Handoff (Phase 4):
-     - Guest activates "Continue on WhatsApp" CTA.
-     - System constructs valid URL-encoded `https://wa.me/?text=...` deep link containing dynamic reservation parameters.
+8. WhatsApp Handoff:
+     - Guest activates WhatsApp handoff action.
+     - System constructs valid URL-encoded `wa.me` deep link addressing configured host number or prompting recipient selection.
      - Store transitions status from `READY_FOR_HANDOFF` to `HANDOFF_OPENED`.
-     - Browser opens deep link in new tab without external API overhead.
+     - Browser opens deep link in new tab.
 ```
 
 ---

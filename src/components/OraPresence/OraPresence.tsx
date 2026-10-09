@@ -281,6 +281,8 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
     }
   });
 
+  const querySeqRef = useRef<number>(0);
+
   const submitQuery = useCallback(
     async (queryText: string): Promise<OraResult> => {
       const trimmed = queryText.trim();
@@ -298,6 +300,11 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
 
       // Stop any running tour if visitor submits a new query
       stopTour();
+      speechOutput.cancel();
+
+      // Increment query sequence counter to reject stale overlapping results
+      querySeqRef.current += 1;
+      const thisQueryId = querySeqRef.current;
 
       // Keep microphone active for continuous barge-in: USER SPEECH > ORA SPEECH
       setOraState("processing");
@@ -309,6 +316,11 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
           context,
           sessionRef.current
         );
+
+        // Guard against stale response: if user has spoken or interrupted in the meantime, ignore
+        if (thisQueryId !== querySeqRef.current) {
+          return result;
+        }
 
         // Check for Grand Tour request
         if (result.action?.type === "START_TOUR" || (result.decision as any)?.type === "START_TOUR") {
@@ -347,6 +359,11 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
           // speech canceled or interrupted
         }
 
+        // Guard again if user interrupted during speech
+        if (thisQueryId !== querySeqRef.current) {
+          return result;
+        }
+
         // 5. Seamlessly return to listening if not barged into
         setOraState((prev) => {
           if (prev === "responding" || prev === "clarification") {
@@ -357,8 +374,10 @@ export const OraPresence: React.FC<OraPresenceProps> = ({
 
         return result;
       } catch (err) {
-        setOraState("error");
-        setOraState(isContinuousActiveRef.current ? "listening" : "idle");
+        if (thisQueryId === querySeqRef.current) {
+          setOraState("error");
+          setOraState(isContinuousActiveRef.current ? "listening" : "idle");
+        }
         throw err;
       }
     },
