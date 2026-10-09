@@ -2,7 +2,7 @@
  * ORA — Pure Fast-Path Intent Router
  * 
  * Extracts and resolves explicit visitor navigation and environmental directives
- * deterministically in <1ms without cloud latency, API costs, or model hallucinations.
+ * deterministically without cloud latency, API costs, or model hallucinations.
  * 
  * Architectural Rule:
  * This module is pure TypeScript: zero Node.js built-ins, zero server secrets,
@@ -304,7 +304,7 @@ export function sanitizeOraResponse(response: string, fallbackSpace?: SpaceId | 
  * Fast-path spatial intent resolver:
  * Instantly maps explicit visitor navigation directives (e.g. "Show me the toilet",
  * "Show me around", "Take me inside", "Show me outside", "Take me back") to typed
- * spatial decisions in <1ms without latency or model hallucinations.
+ * spatial decisions deterministically without latency or model hallucinations.
  */
 export function resolveDirectNavigationIntent(
   input: string,
@@ -454,7 +454,7 @@ export function resolveDirectNavigationIntent(
 /**
  * Fast-path reservation intent resolver:
  * Deterministically parses reservation requests with guest names and calendar dates,
- * emitting INITIATE_TRANSACTION or CLARIFICATION for missing details in <1ms.
+ * emitting INITIATE_TRANSACTION or CLARIFICATION for missing details in-process.
  */
 export function resolveReservationIntent(
   input: string,

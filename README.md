@@ -45,7 +45,7 @@ AURELIA is a concept modernist desert shortlet residence. Rather than clicking t
 $$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} \longrightarrow \text{DECIDE} \longrightarrow \text{REQUEST} \longrightarrow \text{HANDOFF}$$
 
 1. **SPEAK:** Speak naturally via hands-free streaming microphone input.
-2. **UNDERSTAND:** Continuous 16kHz PCM audio streams to AssemblyAI v3 WebSocket; fast-path router resolves common directives locally in <1ms, while conversational queries leverage the configured LLM provider.
+2. **UNDERSTAND:** Continuous 16kHz PCM audio streams to AssemblyAI v3 WebSocket; fast-path router resolves common directives deterministically in-process, while conversational queries leverage the configured LLM provider.
 3. **EXPLORE:** The decoupled `ProductAdapter` navigates the visual canvas: scrubbing frames, switching camera viewpoints, or adjusting lighting.
 4. **DECIDE:** The visitor explores architectural features, takes guided tours, and asks questions with genuine voice interruption (barge-in).
 5. **REQUEST:** Natural language extraction captures customer parameters (guest name, dates), and authoritative domain logic computes estimated stay totals.
@@ -71,7 +71,7 @@ ORA is designed to plug into **any** high-value visual product via the formal `P
 │  │ (Master/Bath/Pool)    │   Center Space     │ • Session / Turn Manager  │  │
 │  └───────────────────────┘                    │ • Speech Synthesis (TTS)  │  │
 │                                               │ • Audio Duck Coordinator  │  │
-│  ┌───────────────────────┐   Audio Duck       │ • Fast-Path Router (<1ms) │  │
+│  ┌───────────────────────┐   Audio Duck       │ • Fast-Path Router         │  │
 │  │   AureliaAtmosphere   │◄───────────────────┤ • Action Bus Dispatcher   │  │
 │  │ (WebAudio Soundscape) │                    └─────────────▲─────────────┘  │
 │  └───────────────────────┘                                  │ Audio / Turns  │
@@ -215,19 +215,22 @@ ORA is designed to run on `localhost:5173` with flexible intelligence configurat
 
 | Variable | Description | Exposure |
 | :--- | :--- | :--- |
-| `ASSEMBLYAI_API_KEY` | AssemblyAI key used by the local Vite server plugin to mint ephemeral v3 WebSocket tokens. | Server-only (Never bundled in client) |
+| `ASSEMBLYAI_API_KEY` | AssemblyAI key used exclusively by the local server/Vite middleware to mint ephemeral v3 WebSocket tokens. Required for live voice. | Server-only (Never bundled in client) |
 | `LLM_PROVIDER` | `ollama` (default for private local execution) or `openrouter`. | Server-only |
 | `OLLAMA_BASE_URL` | Endpoint for local Ollama server (default: `http://127.0.0.1:11434`). | Server-only |
-| `OLLAMA_MODEL` | Local model name (default: `llama3.2:1b`). | Server-only |
-| `OPENROUTER_API_KEY` | OpenRouter API Key (optional fallback). | Server-only |
-| `OPENROUTER_MODEL` | OpenRouter model name (e.g., `liquid/lfm-2.5-2.6b:free`). | Server-only |
+| `OLLAMA_MODEL` | Local model name (e.g. `qwen2.5:1.5b`, `qwen2.5:7b`). Run `ollama list` to see installed models. | Server-only |
+| `OPENROUTER_API_KEY` | OpenRouter API Key (alternative cloud LLM requiring reviewer's own credentials). | Server-only |
+| `OPENROUTER_MODEL` | OpenRouter model name (default: `liquid/lfm-2.5-2.6b:free`). | Server-only |
+
+> [!CAUTION]
+> **Credential Security:** Never prefix `ASSEMBLYAI_API_KEY` with `VITE_` or commit credentials. The API key remains strictly on the server side to mint short-lived tokens and handle LLM requests securely. Live voice streaming requires active AssemblyAI credentials and internet access.
 
 ---
 
 ## Testing & Verification
 
 ```bash
-# Run all 261 tests
+# Run all 272 automated tests
 npm test
 
 # Build production bundle (TypeScript typechecking + Vite bundle)

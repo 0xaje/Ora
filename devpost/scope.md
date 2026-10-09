@@ -36,8 +36,8 @@ Instead of a floating text chatbot in a corner widget or a blind voice assistant
 
 ### ORA (The Reusable Product Layer)
 * Continuous hands-free voice input and streaming STT (AssemblyAI v3).
-* Serene concierge vocalization and instant sub-second barge-in (interruption).
-* Multi-turn conversational reasoning, context memory, and fast-path intent routing (<1ms).
+* Serene concierge vocalization and instant barge-in (speech interruption).
+* Multi-turn conversational reasoning, context memory, and deterministic fast-path intent routing.
 * Domain-agnostic Action Bus dispatching typed envelopes (`NAVIGATE`, `SET_AMBIANCE`, `START_TOUR`, `INITIATE_TRANSACTION`, `DISPATCH_HANDOFF`).
 * Audio ducking coordinator (quieting background soundscapes during speech turns).
 * Structured transaction intent extractor (identifying guest name and stay dates).

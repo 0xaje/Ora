@@ -39,7 +39,7 @@ export {
 };
 
 export const DEFAULT_OPENROUTER_MODEL = "liquid/lfm-2.5-2.6b:free";
-export const DEFAULT_OLLAMA_MODEL = "llama3.2:1b";
+export const DEFAULT_OLLAMA_MODEL = "qwen2.5:1.5b";
 export const DEFAULT_OLLAMA_BASE_URL = "http://127.0.0.1:11434";
 
 export type LlmProvider = "ollama" | "openrouter";
@@ -653,7 +653,7 @@ export async function executeServerOraConversation(
   }
 
   // 4. Fast-path direct navigation intent resolution:
-  // Instantly executes spatial movements (<1ms) for visitor directives like "Show me the toilet",
+  // Instantly executes spatial movements deterministically for visitor directives like "Show me the toilet",
   // "Show me around", "Show me stuff", "Show me the outside", "Take me inside", etc.
   // Note: Only bypass fast-path if this is an explicit provider connectivity test (options.apiKey or options.baseUrl specified)
   const isExplicitProviderTest = options.apiKey !== undefined || (options.baseUrl !== undefined && options.baseUrl !== DEFAULT_OLLAMA_BASE_URL);
@@ -936,7 +936,7 @@ export function evaluateSemanticDecision(
   ) {
     return {
       type: "PROPERTY_ANSWER",
-      response: "Reservations and tailored seasonal rates for Aurelia Sanctuary are arranged upon inquiry."
+      response: "Reservations and rates for Aurelia Sanctuary are arranged upon inquiry."
     };
   }
 

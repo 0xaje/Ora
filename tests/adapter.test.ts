@@ -123,7 +123,7 @@ describe("Phase 2: Pure Fast-Path Module Isolation (src/ora/fastPath.ts)", () =>
     assert.equal(detectExplicitAmbiance("show it in the fog"), null);
   });
 
-  test("resolveDirectNavigationIntent executes <1ms direct routing", () => {
+  test("resolveDirectNavigationIntent executes deterministic direct routing", () => {
     const decision = resolveDirectNavigationIntent("show me the toilet");
     assert.ok(decision);
     assert.equal(decision.type, "SHOW_SPACE");

@@ -89,7 +89,7 @@ export interface ProductAdapter {
   /** Returns the metadata, entities, and capabilities of the host product */
   getContext(): ProductContext;
 
-  /** Optional fast-path domain intent resolver: allows the adapter to map explicit phrases in <1ms */
+  /** Optional fast-path domain intent resolver: allows the adapter to map explicit phrases deterministically */
   resolveFastPathIntent?(
     utterance: string,
     context?: OraConversationContext

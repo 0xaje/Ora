@@ -82,7 +82,7 @@ $$\text{SPEAK} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{EXPLORE} 
 | **FR-04** | **Speech Synthesis (TTS):** Serene concierge voice synthesis with calm British cadence via Web Speech API. | ORA Core | **VERIFIED WORKING** |
 | **FR-05** | **Genuine Voice Barge-In:** Immediate speech and tour cancellation when the guest begins speaking during playback. | ORA Core | **VERIFIED WORKING** |
 | **FR-06** | **Acoustic Ducking:** WebAudio coordinator automatically quieting background soundscape during voice turns. | ORA Core / Aurelia | **VERIFIED WORKING** |
-| **FR-07** | **Sub-Millisecond Fast-Path Router:** Instant regex/keyword routing (<1ms) for common spatial commands. | ORA Core | **VERIFIED WORKING** |
+| **FR-07** | **Deterministic Fast-Path Router:** Instant in-process regex/keyword routing for common spatial and reservation commands. | ORA Core | **VERIFIED WORKING** |
 | **FR-08** | **Dual LLM Conversational Engine:** Multi-turn intent reasoning supporting local Ollama and OpenRouter. | ORA Core | **VERIFIED WORKING** |
 | **FR-09** | **Autonomous Grand Tour:** Sequenced 8-space guided tour with voice narration at ~2.4s intervals. | ORA Core / Aurelia | **VERIFIED WORKING** |
 | **FR-10** | **Product Adapter Boundary:** Formal TypeScript contract decoupling ORA from Aurelia-specific space names. | Architecture | **VERIFIED WORKING (PHASE 2)** |

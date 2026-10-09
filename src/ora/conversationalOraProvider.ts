@@ -66,7 +66,7 @@ export class ConversationalOraProvider implements OraProvider {
     let decision: OraDecision | null = null;
 
     // 0. Fast-path intent resolution:
-    // Instantly maps direct navigation/spatial directives and reservation requests in <1ms
+    // Instantly maps direct navigation/spatial directives and reservation requests deterministically
     try {
       const fastNav = resolveDirectNavigationIntent(trimmed, context, conversationContext);
       if (fastNav) {

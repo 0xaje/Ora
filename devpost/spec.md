@@ -20,7 +20,7 @@ status: approved
 
 ORA operates on a dual-plane architecture:
 1. **Interactive Presentation & Spatial Plane (Browser Client):** Renders the hardware-accelerated 300-frame canvas scrubber, spatial detail panels, ambient WebAudio soundscape, microphone capture worklet, Web Speech synthesis, and the glassmorphic Reservation Pass.
-2. **Conversational Intelligence & Action Plane (Hybrid Client/Server):** Real-time streaming STT over WebSocket to AssemblyAI v3, sub-millisecond fast-path intent routing, session-backed reservation storage, and server-side LLM completion (Ollama / OpenRouter) generating structured action envelopes.
+2. **Conversational Intelligence & Action Plane (Hybrid Client/Server):** Real-time streaming STT over WebSocket to AssemblyAI v3, deterministic fast-path intent routing, session-backed reservation storage, and server-side LLM completion (Ollama / OpenRouter) generating structured action envelopes.
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -36,7 +36,7 @@ ORA operates on a dual-plane architecture:
 │  │ (Master/Bath/Pool)    │   Center Space     │ • Session / Turn Manager  │  │
 │  └───────────────────────┘                    │ • Speech Synthesis (TTS)  │  │
 │                                               │ • Audio Duck Coordinator  │  │
-│  ┌───────────────────────┐   Audio Duck       │ • Fast-Path Router (<1ms) │  │
+│  ┌───────────────────────┐   Audio Duck       │ • Fast-Path Router        │  │
 │  │   AureliaAtmosphere   │◄───────────────────┤ • Action Bus Dispatcher   │  │
 │  │ (WebAudio Soundscape) │                    └─────────────▲─────────────┘  │
 │  └───────────────────────┘                                  │ Audio / Turns  │

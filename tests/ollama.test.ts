@@ -14,8 +14,8 @@ import {
 
 describe("Ollama Provider & Configuration", () => {
   test("request payload is properly constructed with format: json and system prompt", () => {
-    const payload = buildOllamaPayload("Show me the pool", "llama3.2:1b");
-    assert.equal(payload.model, "llama3.2:1b");
+    const payload = buildOllamaPayload("Show me the pool", "qwen2.5:1.5b");
+    assert.equal(payload.model, "qwen2.5:1.5b");
     assert.equal(payload.format, "json");
     assert.equal(payload.stream, false);
     assert.deepEqual(payload.options, { temperature: 0.2, num_predict: 150, num_ctx: 2048 });
@@ -53,9 +53,9 @@ describe("Ollama Provider & Configuration", () => {
       assert.equal(getOllamaModel(), DEFAULT_OLLAMA_MODEL);
 
       process.env.OLLAMA_BASE_URL = "http://192.168.1.100:11434";
-      process.env.OLLAMA_MODEL = "llama3.2:3b";
+      process.env.OLLAMA_MODEL = "qwen2.5:7b";
       assert.equal(getOllamaBaseUrl(), "http://192.168.1.100:11434");
-      assert.equal(getOllamaModel(), "llama3.2:3b");
+      assert.equal(getOllamaModel(), "qwen2.5:7b");
     } finally {
       if (originalUrl) process.env.OLLAMA_BASE_URL = originalUrl;
       else delete process.env.OLLAMA_BASE_URL;

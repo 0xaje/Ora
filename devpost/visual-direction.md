@@ -181,7 +181,7 @@ To achieve AAA visual fidelity without a 50MB 3D engine:
 |---|---|---|---|
 | **Room Architecture & Views** | 2.5D Image Layer | High-resolution curated photographic plates | Instant load, zero GPU crash risk, photorealistic luxury |
 | **Day / Night Lighting** | Dual-Layer Dissolve | CSS `opacity` crossfade between synchronized day/night renders | 60fps smooth lighting shift without shader recomputation |
-| **Camera Movements** | CSS Transform Motion | `translateX`, `scale`, `will-change: transform` | Native GPU hardware acceleration, sub-millisecond response |
+| **Camera Movements** | CSS Transform Motion | `translateX`, `scale`, `will-change: transform` | Native GPU hardware acceleration, immediate response |
 | **HUD, SpecDock, Badges** | Real DOM / CSS | Optical glassmorphism cards, semantic HTML | 100% accessible, crisp text rendering, screen-reader readable |
 | **Digital Stay Pass** | Real DOM / SVG | Embossed card with QR matrix, gold foil gradients | Interactive, verifiable, copyable booking reference |
 

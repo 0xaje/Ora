@@ -61,9 +61,9 @@ ORA replaces this with an embodied spatial agent that directly controls visual s
 
 ### 6. What Makes It Distinctive
 - **The Screen is the Body of the AI:** Voice commands control physical camera position, lighting moods, and soundscape volume directly.
-- **Sub-Millisecond Fast-Path Router:** Instant regex/keyword routing (<1ms) handles common navigation and reservation phrases without waiting for cloud LLMs.
+- **Deterministic Fast-Path Router:** Instant in-process regex/keyword routing handles common navigation and reservation phrases without waiting for cloud LLMs.
 - **Hardware-Accelerated Scrubber:** A 300-frame canvas timeline supporting smooth transitions across three distinct times of day (`day`, `sunset`, `night`).
-- **Deterministic Commerce:** Zero hallucinated rates; stays calculate at the verified $1,850/night estate rate with authenticated `AUR-YYYY-XXXX` references.
+- **Deterministic Commerce:** Zero hallucinated rates; stays calculate at the configured demonstration $1,850/night reference rate with unique `AUR-YYYY-XXXX` references.
 - **Frictionless Handoff:** Bridges conversational exploration directly to real-world mobile messaging via prefilled WhatsApp deep links.
 
 ---
@@ -73,7 +73,7 @@ The project adhered strictly to the Devpost Learn Skill Pack (`challengepost/lea
 - **`scope.md`:** Defined the core thesis (*"The space itself is the interface"*), target personas, and strict proof-of-concept boundaries.
 - **`prd.md`:** Detailed the user journey, functional requirements (FR-01 through FR-14), and truthfulness guardrails.
 - **`spec.md`:** Specified the dual-plane architecture, state machine lifecycles (`DRAFT` &rarr; `READY_FOR_HANDOFF` &rarr; `HANDOFF_OPENED`), and the `ProductAdapter` boundary.
-- **`checklist.md`:** Guided incremental implementation slices verified by an automated test suite of 261 test cases.
+- **`checklist.md`:** Guided incremental implementation slices verified by an automated test suite of 272 test cases.
 
 ---
 
@@ -97,8 +97,8 @@ The project adhered strictly to the Devpost Learn Skill Pack (`challengepost/lea
 - **Frontend:** React 18, TypeScript, Vite, Vanilla CSS
 - **Audio & Media:** WebAudio API (`AureliaAtmosphere`), Web Speech Synthesis
 - **Voice STT:** AssemblyAI Universal Streaming STT v3 WebSocket
-- **Intelligence:** Sub-millisecond Fast-Path Router, Ollama (`llama3.2:1b`), OpenRouter API fallback
-- **Verification:** Node.js native test runner + `tsx` (270 automated tests)
+- **Intelligence:** Deterministic Fast-Path Router, Local Ollama (`qwen2.5:1.5b` or configured local tag), OpenRouter API fallback
+- **Verification:** Node.js native test runner + `tsx` (272 automated tests)
 
 ---
 
@@ -106,7 +106,7 @@ The project adhered strictly to the Devpost Learn Skill Pack (`challengepost/lea
 - **Single Estate Reference Environment:** Modeled for the private Aurelia Sanctuary concept estate ($1,850/night reference buyout rate), demonstrating the `ProductAdapter` boundary.
 - **Reservation Request:** Focuses on verified request generation, deterministic pricing, and WhatsApp handoff rather than live card processing or false booking confirmation.
 - **Session Persistence:** Relies on in-memory and `sessionStorage` state to eliminate external database setup requirements.
-- **Execution & Privacy Architecture:** Speech audio is sent to AssemblyAI for streaming transcription. When local Ollama (`llama3.2:1b`) is used, conversational LLM inference is run on-device with zero LLM API token charges; OpenRouter can be configured as an external alternative.
+- **Execution & Privacy Architecture:** Speech audio is sent to AssemblyAI for streaming transcription. When local Ollama is used, conversational LLM inference is run on-device with zero LLM API token charges; OpenRouter can be configured as an external alternative.
 - **Why Local Architecture Over Cloud Hosting:** Running locally preserves direct access to local Ollama inference without requiring external GPU container hosting. In line with Devpost guidelines, reviewer evaluation is based on the video walkthrough and open repository code.
 
 ---
