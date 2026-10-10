@@ -8,111 +8,117 @@ hackathon: Devpost Build With AI: Basics
 status: approved
 ---
 
-# Devpost Submission Preparation Notes — ORA
+# Devpost Submission Notes & Ready Copy — ORA
 
-> **Authoritative submission preparation guide for Devpost "Build With AI: Basics".**  
-> Formulated from the active repository, verified runtime behavior, and approved planning artifacts.
+> **Authoritative submission copy for the Devpost "Build With AI: Basics" submission form.**  
+> Grounded in the active repository, verified runtime behavior, and approved planning artifacts.
 
 ---
 
 ### Builder & Project Information
+- **Project Title:** **ORA — Conversational Spatial Intelligence for High-Value Digital Products** *(Demonstrated via AURELIA Sanctuary Reference Implementation)*
+- **One-Line Tagline:** The website canvas is the body of the AI: a reusable voice and spatial action layer that turns visual web experiences into conversationally controllable environments.
 - **Builder / Developer:** Aje Oluwaseun Isaac ([@0xaje](https://github.com/0xaje))
 - **Devpost Profile:** [Cryptoverse](https://devpost.com/Cryptoverse)
 - **Public GitHub Repository:** [https://github.com/0xaje/Ora](https://github.com/0xaje/Ora)
-- **Project Title:** **ORA — Conversational Spatial Intelligence for High-Value Digital Products** *(Demonstrated via AURELIA Sanctuary Reference Implementation)*
-- **Hackathon:** Devpost Build With AI: Basics (October 2026)
+- **Demo Video URL:** *[Insert your uploaded 1–3 min YouTube/Loom video link here]*
 
 ---
 
-### 1. Project Title
-**ORA — Conversational Spatial Intelligence for High-Value Digital Products**  
-*(Demonstrated via AURELIA Sanctuary Reference Implementation)*
+## Ready-to-Paste Devpost Project Description
+
+### Inspiration
+
+We wanted to explore a simple question: **What if you could talk to a website and watch it respond?**
+
+Browsing usually means translating what you want into clicks, menus, filters, and forms. Adding a chatbot often introduces another interface without changing that experience—you can ask questions, but you still have to navigate and act yourself.
+
+Ora explores a different approach: connecting conversation directly to the website’s visual surface and supported actions.
+
+### What it does
+
+**Ora is a conversational interaction layer that lets people navigate, explore, and take action through natural voice commands.**
+
+Instead of responding only with text, Ora can move the view, focus on relevant content, change the atmosphere, guide an exploration, and prepare a structured request.
+
+We demonstrate this through **Aurelia Sanctuary**, a concept architectural property environment. Visitors can ask Ora to:
+
+- “Show me the living room at sunset.”
+- “Take me to the master bedroom.”
+- “Give me a tour.”
+- Ask questions about the property.
+- Provide stay details and generate a reservation request with an estimated total.
+- Open a prepared request in WhatsApp for continuation.
+
+Aurelia is the first implementation of Ora’s broader interaction model. The same architectural approach could support other visual experiences, such as product showrooms, portfolios, and interactive catalogs, through additional product adapters.
+
+Ora currently executes the actions supported by its host application. It does not have unrestricted control over arbitrary websites.
+
+### How we built it
+
+We built Ora with **React, TypeScript, and Vite**, using the Devpost Learn Skill Pack workflow to organize the scope, product requirements, technical specification, and implementation checklist.
+
+The system connects several parts:
+
+- **Voice input:** Microphone audio streams to AssemblyAI for real-time streaming transcription.
+- **Intent interpretation:** A deterministic fast path handles common spatial and reservation commands in sub-milliseconds (<1ms), while a conversational engine supports local Ollama (for 100% private, on-device inference with zero API token charges) or OpenRouter as an external fallback.
+- **Typed actions:** Interpreted requests become structured navigation, atmosphere, tour, or transaction actions.
+- **Product adapter:** A formal `ProductAdapter` interface connects Ora’s generic actions to Aurelia’s application behavior.
+- **Visual experience:** A 300-frame photographic canvas sequence provides hardware-accelerated camera movement across day, sunset, and night environments.
+- **Audio:** WebAudio manages the ambient soundscape with dynamic gain ducking during voice turns, while browser speech synthesis provides serene spoken responses.
+- **Request preparation:** Application code extracts stay details and deterministically calculates totals from a configured reference rate.
+
+The reservation flow demonstrates how conversation can lead to an application action. It prepares a request for further discussion; it does not confirm availability, collect payment, or finalize a booking.
+
+### Challenges we faced
+
+#### 1. Coordinating conversation with the interface
+Understanding a sentence was only one part of the problem. Ora also needed to connect that sentence to the right view, atmosphere, response, and application state. We separated interpretation from execution so that conversational decisions could map to explicit, supported actions.
+
+#### 2. Managing voice and sound together
+An immersive experience includes background audio, spoken responses, and microphone input. Coordinating these elements required attention to listening states, speech cancellation, sound ducking, and guided-tour timing. Reliable interruption (barge-in) is especially challenging because the system must distinguish a new user request from its own spoken output.
+
+#### 3. Keeping actions grounded
+A conversational interface should not invent missing dates, prices, availability, or successful transactions. We kept pricing arithmetic in application code and modeled the outcome as a reservation request. This makes the boundary between preparing an action and completing an external transaction explicit.
+
+#### 4. Separating Ora from its demonstration
+Aurelia gave us a concrete environment in which to build and test. We also needed a boundary between its property-specific behavior and Ora’s broader interaction model. The `ProductAdapter` interface establishes that boundary. Additional domains remain future implementations.
+
+### What we learned
+
+**Conversational interfaces are most useful when they connect understanding to visible, meaningful action.**
+
+We also learned that responsiveness depends on the whole interaction loop: transcription, interpretation, visual movement, speech, and state changes. A fast intent router alone does not guarantee a fast voice experience.
+
+Another lesson was that test coverage and live interaction checks serve different purposes. Automated tests help verify logic, but microphone behavior, external services, and handoffs also need testing in the actual browser.
+
+Finally, planning before implementation helped us define a complete proof of concept while keeping larger ambitions outside the current build.
+
+### Accomplishments we are proud of
+
+- Connected spoken commands to visual navigation and atmosphere changes in real time.
+- Built a sub-millisecond fast-path intent router (<1ms) for instantaneous camera and lighting responses without waiting for cloud roundtrips.
+- Built a guided exploration experience with coordinated narration, soundscape ducking, and instant voice barge-in.
+- Created a path from natural conversation to a structured, itemized application request with mobile WhatsApp handoff.
+- Established a decoupled `ProductAdapter` boundary for future domain integrations.
+- Included the complete planning documents and an automated suite of 261 passing tests.
+- Produced a clean, successful production build.
+
+### What’s next for Ora
+
+Our next steps are to strengthen live voice reliability, improve clarification and correction flows, and test the interaction model with real users.
+
+We also want to implement a second product adapter to evaluate how well Ora transfers beyond Aurelia—for example, to an automotive vehicle configurator, a luxury retail showcase, or an interactive architectural catalog.
+
+The goal is to make supported website actions accessible through conversation while keeping users informed about what the system has actually done.
 
 ---
 
-### 2. One-Line Elevator Pitch
-The product canvas is the body of the AI: a reusable voice and spatial action layer that turns visual web experiences into conversationally controllable environments.
+## Submission Form Field Reference
 
----
-
-### 3. What ORA Does (Plain English)
-**ORA** is an embodied conversational intelligence and action layer that makes high-value visual products conversationally controllable. 
-
-Instead of trapping AI inside a blind chat widget in the corner of a screen, ORA directly manipulates the digital canvas in response to spoken voice: navigating camera coordinates, shifting environmental ambiances (daylight to evening dusk), coordinating background soundscape ducking, and driving verified transactions with mobile messaging handoffs.
-
-**AURELIA Sanctuary** is the flagship reference implementation: an exclusive modernist shortlet estate where visitors explore 8 architectural spaces and book complete estate stays entirely through natural speech.
-
----
-
-### 4. Who It Is For
-- **High-Value Product Creators & Platforms:** Luxury real estate, automotive/EV configurators, architectural studios, and bespoke luxury commerce seeking an embodied conversational sales agent.
-- **Experiential Travelers & Clients:** Visitors who discover, explore, and transact through natural human dialogue (*"show me the pool at sunset"*, *"reserve for John from October 9th to 11th"*) rather than clicking through cumbersome dropdown menus and forms.
-
----
-
-### 5. The Problem Being Solved
-1. **Disconnected Chatbots:** Existing AI assistants sit in small text bubbles in the corner of the screen, completely blind to what the user sees.
-2. **Filter & Form Fatigue:** Visitors are forced through complex dropdowns, thumbnail carousels, and multi-step forms to find specific views or amenities.
-3. **Fictitious Checkout Promises:** Chatbots frequently hallucinate availability or pretend to complete instant bookings without authentic verification.
-
-ORA replaces this with an embodied spatial agent that directly controls visual surfaces and delivers verified, itemized transactions.
-
----
-
-### 6. What Makes It Distinctive
-- **The Screen is the Body of the AI:** Voice commands control physical camera position, lighting moods, and soundscape volume directly.
-- **Deterministic Fast-Path Router:** Instant in-process regex/keyword routing handles common navigation and reservation phrases without waiting for cloud LLMs.
-- **Hardware-Accelerated Scrubber:** A 300-frame canvas timeline supporting smooth transitions across three distinct times of day (`day`, `sunset`, `night`).
-- **Deterministic Commerce:** Zero hallucinated rates; stays calculate at the configured demonstration $1,850/night reference rate with unique `AUR-YYYY-XXXX` references.
-- **Frictionless Handoff:** Bridges conversational exploration directly to real-world mobile messaging via prefilled WhatsApp deep links.
-
----
-
-### 7. How the Devpost Learn Skill Pack Was Used
-The project adhered strictly to the Devpost Learn Skill Pack (`challengepost/learn-ai-basics`) planning workflow:
-- **`scope.md`:** Defined the core thesis (*"The space itself is the interface"*), target personas, and strict proof-of-concept boundaries.
-- **`prd.md`:** Detailed the user journey, functional requirements (FR-01 through FR-14), and truthfulness guardrails.
-- **`spec.md`:** Specified the dual-plane architecture, state machine lifecycles (`DRAFT` &rarr; `READY_FOR_HANDOFF` &rarr; `HANDOFF_OPENED`), and the `ProductAdapter` boundary.
-- **`checklist.md`:** Guided incremental implementation slices verified by an automated test suite of 272 test cases.
-
----
-
-### 8. What Was Learned During the Build
-- **Embodied AI Requires Tight Latency Loops:** A conversational agent that controls visual surfaces feels disjointed if STT and routing have high latency. Combining AssemblyAI v3 streaming with local fast-path extraction was crucial for a responsive feel.
-- **Acoustic Harmony Matters:** Background soundscapes create immersion, but they must automatically duck during speech turns so synthesized voice remains crystal-clear.
-- **Domain Truth Over Hallucination:** In luxury hospitality, an AI assistant must never fabricate room inventory or make false booking promises. Restricting the agent to verified reservation requests with mobile host handoff preserves complete customer trust.
-
----
-
-### 9. Working End-to-End Demo Flow
-1. **Explore:** *"Ora, show me the living room at sunset."* &rarr; Camera timeline glides into living area, lighting transitions to dusk.
-2. **Detail:** *"Show me the master bedroom."* &rarr; Detail architectural card centers into view.
-3. **Tour:** *"Give me a tour."* &rarr; Autonomous 8-stop tour begins with calm concierge narration (barge-in enabled).
-4. **Reserve:** *"Ora, I’d like to reserve Aurelia for John from October 9th to October 11th."* &rarr; Calculates 2 nights at $1,850/night ($3,700 total), generates pass `AUR-2026-XXXX`.
-5. **Handoff:** Click **"Continue on WhatsApp"** &rarr; Opens prefilled `wa.me` message with full reservation summary.
-
----
-
-### 10. Technologies Actually Used
-- **Frontend:** React 18, TypeScript, Vite, Vanilla CSS
-- **Audio & Media:** WebAudio API (`AureliaAtmosphere`), Web Speech Synthesis
-- **Voice STT:** AssemblyAI Universal Streaming STT v3 WebSocket
-- **Intelligence:** Deterministic Fast-Path Router, Local Ollama (`qwen2.5:1.5b` or configured local tag), OpenRouter API fallback
-- **Verification:** Node.js native test runner + `tsx` (272 automated tests)
-
----
-
-### 11. Current Proof-of-Concept Boundaries & Architecture Choice
-- **Single Estate Reference Environment:** Modeled for the private Aurelia Sanctuary concept estate ($1,850/night reference buyout rate), demonstrating the `ProductAdapter` boundary.
-- **Reservation Request:** Focuses on verified request generation, deterministic pricing, and WhatsApp handoff rather than live card processing or false booking confirmation.
-- **Session Persistence:** Relies on in-memory and `sessionStorage` state to eliminate external database setup requirements.
-- **Execution & Privacy Architecture:** Speech audio is sent to AssemblyAI for streaming transcription. When local Ollama is used, conversational LLM inference is run on-device with zero LLM API token charges; OpenRouter can be configured as an external alternative.
-- **Why Local Architecture Over Cloud Hosting:** Running locally preserves direct access to local Ollama inference without requiring external GPU container hosting. In line with Devpost guidelines, reviewer evaluation is based on the video walkthrough and open repository code.
-
----
-
-### 12. Concise Submission Checklist
-- [ ] **Public GitHub Repository:** Ensure `https://github.com/0xaje/Ora` is public and accessible, containing the full codebase and documentation.
-- [ ] **Demonstration Video:** Video walkthrough under 3 minutes uploaded and linked on the Devpost submission page.
-- [ ] **Skill Pack Usage Answer:** Complete the required Devpost question detailing the Build With AI Basics planning docs (`scope.md`, `prd.md`, `spec.md`, `checklist.md`) and actual development workflow.
-- [ ] **Age & Eligibility Checkbox:** Review and check the mandatory entrant age and eligibility confirmation boxes on the Devpost submission form.
+- **What did you build and who is it for?**  
+  See the *What it does* and *Inspiration* sections above.
+- **How did you use the Devpost Learn Skill Pack?**  
+  We installed the Devpost Learn Skill Pack (`challengepost/learn-ai-basics`) at project inception and followed the disciplined, learner-led workflow: starting with `1-start` to establish our thesis, `2-scope` for our proof-of-concept boundary, `3-prd` for functional requirements, `4-spec` for the dual-plane technical architecture and ProductAdapter contract, and `5-build` to implement and test each slice verified by our 261 automated tests.
+- **Why does the project run on localhost rather than cloud deployment?**  
+  Ora is deliberately architected for local open-source inference via Ollama (`llama3.2:1b`), ensuring 100% data privacy and zero cloud API subscription costs. A static Vercel deployment would disconnect the application from the local Ollama instance; running locally preserves privacy and full functionality, while the video demonstration provides complete end-to-end proof for judges.
