@@ -4,10 +4,22 @@
 > A reusable conversational intelligence and spatial action layer for high-value visual digital products.  
 > *Demonstrated via the **AURELIA Sanctuary** luxury architectural shortlet reference implementation.*
 
-[![Test Suite](https://img.shields.io/badge/tests-270%20passing-brightgreen)](tests/)
+[![Test Suite](https://img.shields.io/badge/tests-272%20passing-brightgreen)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Devpost](https://img.shields.io/badge/Devpost-Build%20With%20AI%3A%20Basics-blueviolet)](https://learn-ai-basics.devpost.com/)
 [![Repository](https://img.shields.io/badge/GitHub-0xaje%2FOra-black)](https://github.com/0xaje/Ora)
+[![YouTube Demo](https://img.shields.io/badge/YouTube-Watch%20Demo-red?logo=youtube)](https://youtu.be/qsQveok-xZg)
+
+---
+
+## 🎬 Video Demonstration
+
+Watch the complete 2-minute 47-second live walkthrough of **ORA** running end-to-end:
+
+[![ORA Video Demonstration](https://img.youtube.com/vi/qsQveok-xZg/maxresdefault.jpg)](https://youtu.be/qsQveok-xZg)
+
+> 📺 **Direct Link:** [https://youtu.be/qsQveok-xZg](https://youtu.be/qsQveok-xZg)  
+> *Demonstrating streaming voice interaction via AssemblyAI, sub-millisecond intent extraction, 300-frame canvas camera scrubbing, atmospheric lighting transitions, acoustic ducking, and reservation request WhatsApp handoff.*
 
 ---
 

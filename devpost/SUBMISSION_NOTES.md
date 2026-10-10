@@ -21,7 +21,7 @@ status: approved
 - **Builder / Developer:** Aje Oluwaseun Isaac ([@0xaje](https://github.com/0xaje))
 - **Devpost Profile:** [Cryptoverse](https://devpost.com/Cryptoverse)
 - **Public GitHub Repository:** [https://github.com/0xaje/Ora](https://github.com/0xaje/Ora)
-- **Demo Video URL:** *[Insert your uploaded 1–3 min YouTube/Loom video link here]*
+- **Demo Video URL:** [https://youtu.be/qsQveok-xZg](https://youtu.be/qsQveok-xZg)
 
 ---
 
